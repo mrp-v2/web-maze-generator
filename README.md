@@ -1,7 +1,7 @@
 # Web Maze Generator
 ## Design Deliverable
 ### Elevator Pitch / Description
-Web Maze Generator provides a online service that allows creating mazes of arbitrary size, viewing their solution, and saving them to an account to review them later.
+Do you ever randomly want the satisfaction of solving a maze, but lack a convenient maze nearby? Web Maze Generator provides an online service that allows creating mazes of arbitrary size, viewing their solution, and saving them to an account to review them later.
 ### Design
 #### Main Page
 ![Main Page Design](/layout/WebMazeGeneratorMainPage.png)
