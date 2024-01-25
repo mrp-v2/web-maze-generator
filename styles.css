@@ -3,8 +3,20 @@
     box-sizing: border-box;
 }
 
+body{
+    background-color: #ffffff;
+}
+
+header{
+    background-color: #40aa40;
+    border-radius: 10px;
+}
+
 header > h1 > a {
-    color: green;
+    color: #40aa40; 
+    background-color: #ffffff;
+    border-radius: 10px;
+    padding: 0.5rem 1rem;
 }
 
 header > i {
@@ -26,6 +38,29 @@ header {
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    border-bottom: thick darkgreen solid;
     padding-left: 1rem;
+}
+
+#home-main-div {
+    display: flex;
+    flex-direction: row;
+}
+
+#latest-saved-mazes-div {
+    background-color: #40a0f0;
+    border-radius: 10px;
+    padding: 0rem 1rem 1rem;
+}
+
+#latest-saved-mazes-div > h2 {
+    text-align: center;
+}
+
+#latest-saved-mazes-mazes-div {
+    display: flex;
+    flex-direction: column;
+}
+
+#latest-saved-maze-2 {
+    margin: 1rem 0rem;
 }
