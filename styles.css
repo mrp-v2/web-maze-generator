@@ -1,0 +1,31 @@
+* {
+    font-family: sans-serif;
+    box-sizing: border-box;
+}
+
+header > h1 > a {
+    color: green;
+}
+
+header > i {
+    flex: 1;
+    justify-content: right;
+    text-align: right;
+    margin: 1rem;
+    font-size: 1.25rem;
+}
+
+header > button {
+    border-radius: 5px;
+    margin: 1rem;
+    font-size: 1.5rem;
+}
+
+header {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    border-bottom: thick darkgreen solid;
+    padding-left: 1rem;
+}
