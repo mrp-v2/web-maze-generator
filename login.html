@@ -2,27 +2,31 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width,initial-scale=1" />
         <title>Web Maze Generator</title>
         <link rel="icon" href="icon.ico" />
-        <link rel="stylesheet" type="text/css" href="styles.css">
+        <link rel="stylesheet" type="text/css" href="universal-styles.css">
+        <link rel="stylesheet" type="text/css" href="login-styles.css">
     </head>
     <body>
         <header>
             <h1><a href="index.html">Web Maze Generator</a></h1>
             <div class="header-filler"></div>
-            <div><button>Saved Mazes</button></div>
+            <div class="button-div"><button>Saved Mazes</button></div>
         </header>
         <main>
             <form>
-                <label for="username">Username:</label>
-                <input id="username" type="text" placeholder="username" />
-                <br />
-                <label for="password">Password:</label>
-                <input id="password" type="password" placeholder="password" />
-                <br />
-                <button>Login</button>
+                <div>
+                    <label for="username">Username:</label>
+                    <input id="username" type="text" placeholder="username" />
+                </div>
+                <div>
+                    <label for="password">Password:</label>
+                    <input id="password" type="password" placeholder="password" />
+                </div>
+                <div><div class="button-div"><button type="button">Login</button></div></div>
+                <a href="create-account.html">Create an Account</a>
             </form>
-            <a href="create-account.html">Create an Account</a>
         </main>
         <footer>
             Matthew Partington<br>
