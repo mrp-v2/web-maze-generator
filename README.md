@@ -35,3 +35,11 @@ Drafted the HTML for the application.
 - **Images** - Mazes will be drawn in a svg, which hasn't been implemented yet, so images are blank for now
 - **DB/Login** - Login page had text boxes for entering user informationm and a login button. Mazes displayed on the main page come from database, as well as those in the Saved Mazes page.
 - **WebSocket** - As mazes are saved, the latest saved mazes from all users are shown on the home page.
+## CSS Deliveralbe
+Drafted styling of the HTML using CSS. Styling may change subtly as more features are implemented to better accomodate them.
+- **Header, Footer & Main** all have consistent styling accross the four pages
+- **Navigation Elements / Links** are consistentely underlined and surrounded with a bubble of whitespace
+- **Reponds to Resizing the Window** by changing flex direction
+- **Elements** have a bright color scheme and rounded edges, buttons change color slightly when hovered over
+- **Text** is a consistent font and is a lighter color on darker backgrounds
+- **Images** - for now the svg's just have a border, more styling will come once I know what rendered mazes will look like
