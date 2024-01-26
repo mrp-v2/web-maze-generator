@@ -1,0 +1,56 @@
+main {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}
+
+main > div {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--blue);
+    border-radius: 10px;
+    padding: 1rem 1rem 0.5rem 1rem;
+}
+
+main > div > svg {
+    width: 100%;
+}
+
+main > div > div {
+    display: flex;
+    flex-direction: row;
+    padding: 0.5rem 0rem 0rem 0rem;
+    align-items: center;
+    margin: 0rem 1rem;
+}
+
+main > div > div > div.text-div {
+    flex: 1;
+    text-align: left;
+}
+
+main > div > div > div.button-div {
+    background-color: var(--white);
+    border-radius: 6px;
+}
+
+main > div > div > div > button {
+    flex: 1;
+    border-radius: 5px;
+    border-color: var(--blue);
+    margin: 0.125rem;
+}
+
+footer {
+    padding: 0.5rem;
+}
+
+@media (orientation: portrait) {
+    main {
+        grid-template-columns: 1fr;
+    }
+
+    footer {
+        padding: 0.25rem;
+    }
+}

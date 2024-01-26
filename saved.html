@@ -2,29 +2,27 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width,initial-scale=1" />
         <title>Web Maze Generator</title>
         <link rel="icon" href="icon.ico" />
-        <link rel="stylesheet" type="text/css" href="styles.css">
+        <link rel="stylesheet" type="text/css" href="universal-styles.css">
+        <link rel="stylesheet" type="text/css" href="saved-styles.css">
     </head>
     <body>
         <header>
             <h1><a href="index.html">Web Maze Generator</a></h1>
-            <i>username</i>
-            <div><button>Saved Mazes</button></div>
+            <div class="portrait-div">
+                <i class="header-filler">username</i>
+                <div class="button-div"><button type="button">Saved Mazes</button></div>
+            </div>
         </header>
         <main>
-            <div id="saved-mazes-div">
-                <div id="example-saved-maze">
-                    <table>
-                        <tr>
-                            <td>width * height</td>
-                            <td><button>Delete</button></td>
-                        </tr>
-                        <tr>
-                            <svg id="example-saved-maze-canvas" style="border: 1px solid #000000">
-                            </svg>
-                        </tr>
-                    </table>
+            <div id="example-saved-maze">
+                <svg id="example-saved-maze-canvas">
+                </svg>
+                <div>
+                    <div class="text-div">width * height</div>
+                    <div class="button-div"><button type="button">Delete</button></div>
                 </div>
             </div>
         </main>

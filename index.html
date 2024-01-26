@@ -1,21 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Web Maze Generator</title>
-    <link rel="icon" href="icon.ico" />
-    <link rel="stylesheet" type="text/css" href="styles.css">
-</head>
-<body>
-    <header>
-        <h1><a href="index.html">Web Maze Generator</a></h1>
-        <i>username</i>
-        <div><button>Saved Mazes</button></div>
-    </header>
-    <main>
-        <div id="home-main-div">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width,initial-scale=1" />
+        <title>Web Maze Generator</title>
+        <link rel="icon" href="icon.ico" />
+        <link rel="stylesheet" type="text/css" href="universal-styles.css">
+        <link rel="stylesheet" type="text/css" href="index-styles.css">
+    </head>
+    <body>
+        <header>
+            <h1><a href="index.html">Web Maze Generator</a></h1>
+            <div class="portrait-div">
+                <i class="header-filler">username</i>
+                <div class="button-div"><button type="button">Saved Mazes</button></div>
+            </div>
+        </header>
+        <main>
             <div id="latest-saved-mazes-div">
                 <h2>Latest Mazes Saved</h2>
                 <div id="latest-saved-mazes-mazes-div">
@@ -31,18 +32,18 @@
                 <div id="maze-generation-controls">
                     <form>
                         <div id="input-div">
-                            <div id="width-input-div">
+                            <div>
                                 <label for="width-input">Width</label>
                                 <input id="width-input" type="number" value="10" min="5" max="50"/>
                             </div>
-                            <div id="height-input-div">
+                            <div>
                                 <label for="height-input">Height</label>
                                 <input id="height-input" type="number" value="10" min="5" max="50"/>
                             </div>
                         </div>
                         <div id="button-div">
-                            <button>Generate</button>
-                            <button>Save</button>
+                            <div><button type="button">Generate</button></div>
+                            <div><button type="button">Save</button></div>
                         </div>
                     </form>
                 </div>
@@ -52,11 +53,10 @@
                     </canvas>
                 </div>
             </div>
-        </div>
-    </main>
-    <footer>
-        Matthew Partington<br>
-        <a href="https://github.com/mrp-v2/web-maze-generator">GitHub</a>
-    </footer>
-</body>
+        </main>
+        <footer>
+            Matthew Partington<br>
+            <a href="https://github.com/mrp-v2/web-maze-generator">GitHub</a>
+        </footer>
+    </body>
 </html>

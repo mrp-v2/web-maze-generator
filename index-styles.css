@@ -1,0 +1,110 @@
+main {
+    display: flex;
+    flex-direction: row;
+}
+
+#latest-saved-mazes-div {
+    flex: 0;
+    background-color: var(--blue);
+    border-radius: 10px;
+    padding: 0rem 1rem 1rem;
+    display: flex;
+    flex-direction: column;
+}
+
+#latest-saved-mazes-div > h2 {
+    text-align: center;
+    flex: 0;
+}
+
+#latest-saved-mazes-mazes-div {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+#latest-saved-mazes-mazes-div > svg {
+    flex: 1;
+}
+
+#latest-saved-maze-2 {
+    margin: 1rem 0rem;
+}
+
+#maze-generation {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--red);
+    border-radius: 10px;
+    padding: 0rem 1rem 1rem 1rem;
+}
+
+#maze-generation-controls {
+    flex: 0;
+    display: flex;
+    flex-direction: row;
+}
+
+form {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+#input-div {
+    display: flex;
+    flex-direction: row;
+}
+
+#generated-maze-div {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+}
+
+#generated-maze-canvas {
+    flex: 1;
+}
+
+#button-div {
+    display: flex;
+    flex-direction: row;
+}
+
+#button-div > div {
+    background-color: var(--white);
+    border-radius: 6px;
+    margin: 0.375rem;
+}
+
+#button-div > div > button {
+    border-radius: 5px;
+    border-color: var(--red);
+    border-width: 2px;
+    margin: 0.125rem;
+}
+
+#input-div > div {
+    margin: 0.5rem;
+    padding: 0.0rem;
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+}
+
+#input-div > div > label {
+    color: var(--white);
+    align-self: center;
+}
+
+@media (orientation: portrait) {
+    main {
+        flex-direction: column;
+    }
+
+    #input-div > div {
+        flex-direction: column;
+    }
+}
