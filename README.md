@@ -27,3 +27,11 @@ Do you ever randomly want the satisfaction of solving a maze, but lack a conveni
 - **DB/Login** - Store accounts and saved mazes
 - **WebSocket** - The last three mazes to be saved are tracked by the server and clients are updated whenever a new maze is saved
 - **React** - eventually rework things to use React
+## HTML Deliverable
+Drafted the HTML for the application.
+- **HTML Pages** - Four HTML pages, for generating mazes, logging in, creating an account, and viewing saved mazes
+- **Links** - Every page links back to the page for generating mazes, but navigation to the saved mazes and account pages are controlled by button, to redirect from saved mazes to logging in if the user isn't logged in, so the button is not yet impemented
+- **Text** - All neccessary text is included to instruct the user on how to use the application
+- **Images** - Mazes will be drawn in a svg, which hasn't been implemented yet, so images are blank for now
+- **DB/Login** - Login page had text boxes for entering user informationm and a login button. Mazes displayed on the main page come from database, as well as those in the Saved Mazes page.
+- **WebSocket** - As mazes are saved, the latest saved mazes from all users are shown on the home page.
