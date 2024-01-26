@@ -13,15 +13,22 @@ main > form {
     color: var(--white);
     display: flex;
     flex-direction: column;
-    align-items: center;
     gap: 0.25rem;
 }
 
 main > form > div {
     display: flex;
     flex-direction: row;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
+}
+
+main > form > div > input {
+    flex: 0;
+}
+
+main > form > div > label {
+    flex: 1;
 }
 
 main > form > div button {

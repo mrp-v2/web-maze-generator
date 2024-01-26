@@ -2,9 +2,11 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width,initial-scale=1" />
         <title>Web Maze Generator</title>
         <link rel="icon" href="icon.ico" />
-        <link rel="stylesheet" type="text/css" href="styles.css">
+        <link rel="stylesheet" type="text/css" href="universal-styles.css">
+        <link rel="stylesheet" type="text/css" href="login-styles.css">
     </head>
     <body>
         <header>
@@ -14,16 +16,21 @@
         </header>
         <main>
             <form>
-                <label for="username">Username:</label>
-                <input id="username" type="text" placeholder="username" />
-                <br />
-                <label for="password">Password:</label>
-                <input id="password" type="password" placeholder="password" />
-                <br />
-                <label for="password">Repeat Password:</label>
-                <input id="password" type="password" placeholder="password" />
-                <br />
-                <button>Create Account</button>
+                <div>
+                    <label for="username">Username:</label>
+                    <input id="username" type="text" placeholder="username" />
+                </div>
+                <div>
+                    <label for="password">Password:</label>
+                    <input id="password" type="password" placeholder="password" />
+                </div>
+                <div>
+                    <label for="password">Repeat Password:</label>
+                    <input id="password" type="password" placeholder="password" />    
+                </div>
+                <div>
+                    <div class="button-div"><button>Create Account</button></div>
+                </div>
             </form>
         </main>
         <footer>
