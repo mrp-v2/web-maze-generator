@@ -1,4 +1,4 @@
-function login() {
+function create_account() {
     const username = document.querySelector("#username");
     if (username.value === "") {
         return;

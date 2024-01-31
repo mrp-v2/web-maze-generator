@@ -7,12 +7,14 @@
         <link rel="icon" href="icon.png" />
         <link rel="stylesheet" type="text/css" href="universal-styles.css">
         <link rel="stylesheet" type="text/css" href="login-styles.css">
+        <script src="saved-mazes-button.js"></script>
+        <script src="create-account.js"></script>
     </head>
     <body>
         <header>
             <h1><a href="index.html">Web Maze Generator</a></h1>
             <div class="header-filler"></div>
-            <div><button>Saved Mazes</button></div>
+            <div><button type="button" onclick="saved_mazes_clicked()">Saved Mazes</button></div>
         </header>
         <main>
             <form>
@@ -29,7 +31,7 @@
                     <input id="password" type="password" placeholder="password" />    
                 </div>
                 <div>
-                    <div class="button-div"><button>Create Account</button></div>
+                    <div class="button-div"><button onclick="create_account()">Create Account</button></div>
                 </div>
             </form>
         </main>
