@@ -1,9 +1,5 @@
 import { Maze } from './modules/maze.js';
 
-function load_complete() {
-
-}
-
 function generate_maze_clicked() {
     /** @type {number} */
     const width = document.querySelector("#width-input").value;
