@@ -13,7 +13,8 @@
         <header>
             <h1><a href="index.html">Web Maze Generator</a></h1>
             <div class="portrait-div">
-                <i class="header-filler">username</i>
+                <i class="header-filler" id="username-italics">username</i>
+                <script src="username-filler.js"></script>
                 <div class="button-div"><button type="button" onclick="saved_mazes_clicked()">Saved Mazes</button></div>
             </div>
         </header>
@@ -23,7 +24,7 @@
                 </svg>
                 <div>
                     <div class="text-div">width * height</div>
-                    <div class="button-div"><button type="button">Delete</button></div>
+                    <div class="button-div"><button type="button" onclick="delete_maze_pressed(this)">Delete</button></div>
                 </div>
             </div>
         </main>
@@ -32,4 +33,5 @@
             <a href="https://github.com/mrp-v2/web-maze-generator">GitHub</a>
         </footer>
     </body>
+    <script src="saved.js"></script>
 </html>

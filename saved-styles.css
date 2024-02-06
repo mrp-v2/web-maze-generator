@@ -13,6 +13,7 @@ main > div {
 }
 
 main > div > svg {
+    flex: 1;
     width: 100%;
 }
 
