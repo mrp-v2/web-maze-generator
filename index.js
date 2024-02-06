@@ -9,4 +9,9 @@ function generate_maze_clicked() {
     maze.draw_maze(document.querySelector("#generated-maze-canvas"));
 }
 
+function save_maze_clicked() {
+
+}
+
 document.querySelector("#generate-button").addEventListener('click', generate_maze_clicked);
+document.querySelector("#save-button").addEventListener('click', save_maze_clicked);
