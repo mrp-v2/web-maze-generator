@@ -14,7 +14,9 @@ export class Maze {
     #fullheight;
     /** @type {number} */
     #fullsize;
-    /** @type {Array<boolean>} */
+    /**
+     * true for empty, false for blocked
+     *  @type {Array<boolean>} */
     #data;
     /** @type {Array<number>} */
     #cells_in_maze;
@@ -163,5 +165,39 @@ export class Maze {
             nodes.push(rect);
         }
         svg.replaceChildren(...nodes);
+    }
+
+    /**
+     * 0 for empty, 1 for blocked
+     */
+    to_string() {
+        let str = `${this.#width},${this.#height},`;
+        for (let i = 0; i < this.#fullsize; i++){
+            if (this.#data[i]){
+                str += '0';
+            } else {
+                str += '1';
+            }
+        }
+        return str;
+    }
+
+    /**
+     * 
+     * @param {string} str 
+     */
+    static from_string(str) {
+        let parts = str.split(',')
+        let width = Number(parts[0]);
+        let height = Number(parts[1])
+        let maze_str = parts[2];
+        let maze = new Maze(width, height)
+        for (let i = 0; i < maze.#fullsize; i++){
+            if (maze_str[i] == 0){
+                maze.#data[i] = true;
+            } else{
+                maze.#data[i] = false;
+            }
+        }
     }
 }
