@@ -182,6 +182,14 @@ export class Maze {
         return str;
     }
 
+    width(){
+        return this.#width;
+    }
+
+    height(){
+        return this.#height;
+    }
+
     /**
      * 
      * @param {string} str 
@@ -199,5 +207,6 @@ export class Maze {
                 maze.#data[i] = false;
             }
         }
+        return maze;
     }
 }
