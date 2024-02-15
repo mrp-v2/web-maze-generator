@@ -44,8 +44,8 @@ function add_maze(maze, id){
     info_div.appendChild(button_div);
     maze_div.appendChild(svg);
     maze_div.appendChild(info_div);
-    main.appendChild(maze_div);
     maze.draw_maze(svg);
+    main.appendChild(maze_div);
 }
 
 let saved_mazes = sessionStorage.getItem("saved_mazes");

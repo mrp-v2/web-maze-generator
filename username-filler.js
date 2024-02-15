@@ -1,5 +1,5 @@
 let label = document.querySelector("#username-italics");
-stored_username = localStorage.getItem("username");
+stored_username = sessionStorage.getItem("username");
 if (stored_username === null){
     label.textContent = "";
 } else {
