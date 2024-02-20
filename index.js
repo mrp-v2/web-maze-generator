@@ -2,9 +2,21 @@ import { Maze } from './modules/maze.js';
 
 function generate_maze_clicked() {
     /** @type {number} */
-    const width = document.querySelector("#width-input").value;
+    let width = document.querySelector("#width-input").value;
+    if (width < 5){
+        width = 5;
+    }
+    else if (width > 50){
+        width = 50;
+    }
     /** @type {number} */
-    const height = document.querySelector("#height-input").value;
+    let height = document.querySelector("#height-input").value;
+    if (height < 5){
+        height = 5;
+    }
+    else if (height > 50){
+        height = 50;
+    }
     const maze = new Maze(width, height);
     maze.draw_maze(document.querySelector("#generated-maze-canvas"));
     sessionStorage.setItem("current_maze", maze.to_string());
