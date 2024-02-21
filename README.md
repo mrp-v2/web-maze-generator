@@ -43,3 +43,9 @@ Drafted styling of the HTML using CSS. Styling may change subtly as more feature
 - **Elements** have a bright color scheme and rounded edges, buttons change color slightly when hovered over
 - **Text** is a consistent font and is a lighter color on darker backgrounds
 - **Images** - for now the svg's just have a border, more styling will come once I know what rendered mazes will look like
+## JavaScript Deliverable
+Added JavaScript for maze generation, page navigation, logging in and creating an account, and viewing saved mazes.
+- **Login/Account Creation** - After logging in, the username displays in the header. When trying to view saved mazes, redirects to login page if not logged in.
+- **Database** - Saved mazes are stored in sessionStorage temporarily. Can be viewed on the Saved Mazes page.
+- **WebSocket** - The latest locally saved mazes are displayed in the latest saved mazes temporarily.
+- **Application Logic** - Mazes are generated according to the requested size.
