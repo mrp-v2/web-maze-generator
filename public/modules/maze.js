@@ -21,47 +21,21 @@ export class Maze {
     /** @type {Array<number>} */
     #cells_in_maze;
 
-    /**
-     * 
-     * @param {number} width 
-     * @param {number} height 
-     */
-    constructor(width, height){
+    constructor(width, height, data) {
         this.#width = width;
         this.#height = height;
         this.#size = this.#width * this.#height;
         this.#fullwidth = this.#width * 2 + 1;
         this.#fullheight = this.#height * 2 + 1;
         this.#fullsize = this.#fullwidth * this.#fullheight;
-        this.#data = Array();
+        this.#data = data;
         this.#cells_in_maze = Array();
-        this.#generate_maze();
     }
 
-    /**
-     * 
-     * @param {number} cell 
-     * @returns {boolean}
-     */
-    #is_cell_in_maze(cell){
-        return this.#cells_in_maze.includes(cell);
-    }
-
-    /**
-     * 
-     * @param {number} cell 
-     */
-    #put_cell_in_maze(cell){
-        this.#cells_in_maze.push(cell);
-    }
-
-    /**
-     * 
-     * @param {number} a 
-     * @param {number} b 
-     */
-    #make_path(a, b){
-        this.#data[(a + b) / 2] = true;
+    static generate_maze(width, height) {
+        let maze = new Maze(width, height, Array());
+        maze.generate_maze();
+        return maze;
     }
 
     /**
@@ -75,7 +49,7 @@ export class Maze {
                     break;
                 }
             }
-            if (!this.#cells_in_maze.includes(i)){
+            if (!this.#cells_in_maze.includes(i)) {
                 return i;
             }
         }
@@ -106,7 +80,7 @@ export class Maze {
         return possibilites[Math.floor(Math.random() * possibilites.length)];
     }
 
-    #generate_maze() {
+    generate_maze() {
         for (let i = 0; i < this.#fullsize; i++) {
             this.#data[i] = false;
         }
@@ -123,13 +97,13 @@ export class Maze {
             this.#data[i] = true;
         }
         /** @type {Array<number>} */
-        this.#put_cell_in_maze(this.#get_cell_not_in_maze());
+        this.#cells_in_maze.push(this.#get_cell_not_in_maze());
         let cell_not_in_maze = this.#get_cell_not_in_maze();
         while (cell_not_in_maze !== -1) {
             /** @type {Array<number>} */
             const path = Array();
             path.push(cell_not_in_maze);
-            while (!this.#is_cell_in_maze(path[path.length - 1])){
+            while (!this.#cells_in_maze.includes(path[path.length - 1])){
                 let next = this.#get_random_neighbor_cell(path[path.length - 1]);
                 if (path.includes(next)){
                     path.length = path.indexOf(next) + 1;
@@ -138,8 +112,8 @@ export class Maze {
                 }
             }
             for (let index = 0; index < path.length - 1; index++){
-                this.#make_path(path[index], path[index + 1])
-                this.#put_cell_in_maze(path[index]);
+                this.#data[(path[index] + path[index + 1]) / 2] = true;
+                this.#cells_in_maze.push(path[index]);
             }
             cell_not_in_maze = this.#get_cell_not_in_maze();
         }
@@ -171,15 +145,12 @@ export class Maze {
      * 0 for empty, 1 for blocked
      */
     to_string() {
-        let str = `${this.#width},${this.#height},`;
-        for (let i = 0; i < this.#fullsize; i++){
-            if (this.#data[i]){
-                str += '0';
-            } else {
-                str += '1';
-            }
-        }
-        return str;
+        let obj = {
+            width: this.#width,
+            height: this.#height,
+            data: this.#data
+        };
+        return JSON.stringify(obj);
     }
 
     width(){
@@ -195,18 +166,9 @@ export class Maze {
      * @param {string} str 
      */
     static from_string(str) {
-        let parts = str.split(',')
-        let width = Number(parts[0]);
-        let height = Number(parts[1])
-        let maze_str = parts[2];
-        let maze = new Maze(width, height)
-        for (let i = 0; i < maze.#fullsize; i++){
-            if (maze_str[i] == 0){
-                maze.#data[i] = true;
-            } else{
-                maze.#data[i] = false;
-            }
-        }
+        /** @type {object} */
+        let obj = JSON.parse(str);
+        let maze = new Maze(obj.width, obj.height, obj.data)
         return maze;
     }
 }
