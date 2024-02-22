@@ -17,7 +17,7 @@ function generate_maze_clicked() {
     else if (height > 50){
         height = 50;
     }
-    const maze = new Maze(width, height);
+    const maze = Maze.generate_maze(width, height);
     maze.draw_maze(document.querySelector("#generated-maze-canvas"));
     sessionStorage.setItem("current_maze", maze.to_string());
 }
