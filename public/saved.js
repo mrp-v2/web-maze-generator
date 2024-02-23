@@ -4,18 +4,16 @@ import {Maze} from "./modules/maze.js";
  * 
  * @param {PointerEvent} event 
  */
-function delete_maze_pressed(event) {
-    let main = document.querySelector("main");
+async function delete_maze_pressed(event) {
     /** @type {string} */
     let target = event.target.id;
     let index = Number(target.substring(11, target.length - 7));
-    let id = `#${target.substring(0, target.length - 7)}`
-    let maze_element = document.querySelector(id);
-    main.removeChild(maze_element);
-    /** @type {Array<string>} */
-    let saved_mazes = JSON.parse(sessionStorage.getItem("saved_mazes"));
-    saved_mazes.splice(index)
-    sessionStorage.setItem("saved_mazes", JSON.stringify(saved_mazes));
+    await fetch('/api/delete_maze', {
+        method: 'POST',
+        headers: {'content-type': 'application/json'},
+        body: JSON.stringify({ index: index })
+    })
+    await update_mazes();
 }
 
 /**
@@ -48,12 +46,26 @@ function add_maze(maze, id){
     main.appendChild(maze_div);
 }
 
-let saved_mazes = sessionStorage.getItem("saved_mazes");
+async function update_mazes() {
+    let main = document.querySelector("main");
+    while (main.firstChild){
+        main.removeChild(main.firstChild);
+    }
+    /** @type {Array<string>} */
+    let saved_mazes = JSON.parse(sessionStorage.getItem("saved_mazes"));
+    const response = await fetch('/api/saved_mazes', {
+        method: 'GET'
+    });
+    if (response.ok){
+        saved_mazes = await response.json();
+        sessionStorage.setItem("saved_mazes", JSON.stringify(saved_mazes));
+    }
     if (saved_mazes !== null){
-        /** @type {Array<string>} */
-        let mazes = JSON.parse(saved_mazes);
-        for (let i in mazes){
-            add_maze(Maze.from_string(mazes[i]), `saved-maze-${i}`);
+        let mazes = saved_mazes;
+        for (let i in saved_mazes){
+            add_maze(Maze.from_json(mazes[i]), `saved-maze-${i}`);
         }
     }
-// add saved mazes
+}
+
+update_mazes();

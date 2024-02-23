@@ -6,24 +6,29 @@ const port = process.argv.length > 2 ? process.argv[2] : 4000;
 app.use(express.json());
 app.use(express.static('public'));
 
-app.use((req, res) => {
-    res.sendFile('index.html', { root: 'public' });
-});
-
 const apiRouter = express.Router();
 app.use('/api', apiRouter);
 
 apiRouter.get('/saved_mazes', (req, res) => {
-    // TODO
+    res.send(JSON.stringify(saved_mazes));
 });
 
-apiRouter.post('/saved_maze', (req, res) => {
-    // TODO
+apiRouter.post('/save_maze', (req, res) => {
+    saved_mazes.push(req.body);
+    res.send(JSON.stringify(saved_mazes));
+});
+
+apiRouter.post('/delete_maze', (req, res) => {
+    saved_mazes.splice(req.body.index, 1);
+    res.send();
 });
 
 app.listen(port, () => {
     console.log(`listening on port ${port}`);
 });
 
-let saved_mazes = {};
+app.use((req, res) => {
+    res.sendFile('index.html', { root: 'public' });
+});
 
+let saved_mazes = [];

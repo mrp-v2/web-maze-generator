@@ -166,9 +166,10 @@ export class Maze {
      * @param {string} str 
      */
     static from_string(str) {
-        /** @type {object} */
-        let obj = JSON.parse(str);
-        let maze = new Maze(obj.width, obj.height, obj.data)
-        return maze;
+        return this.from_json(JSON.parse(str));
+    }
+
+    static from_json(json) {
+        return new Maze(json.width, json.height, json.data);
     }
 }

@@ -22,20 +22,29 @@ function generate_maze_clicked() {
     sessionStorage.setItem("current_maze", maze.to_string());
 }
 
-function save_maze_clicked() {
+async function save_maze_clicked() {
     let current_maze = sessionStorage.getItem("current_maze");
     if (current_maze !== null) {
-        let saved_mazes = sessionStorage.getItem("saved_mazes");
-        if (saved_mazes !== null) {
-            /** @type {Array<string>} */
-            let mazes = JSON.parse(saved_mazes);
-            mazes.push(current_maze)
-            sessionStorage.setItem("saved_mazes", JSON.stringify(mazes));
+        const response = await fetch('/api/save_maze', {
+            method: 'POST',
+            headers: {'content-type': 'application/json'},
+            body: current_maze
+        });
+        if (response.ok) {
+            sessionStorage.setItem("saved_mazes", JSON.stringify(await response.json()));
         } else {
-            /** @type {Array<Maze>} */
-            let mazes = new Array();
-            mazes.push(current_maze);
-            sessionStorage.setItem("saved_mazes", JSON.stringify(mazes));
+            let saved_mazes = sessionStorage.getItem("saved_mazes");
+            if (saved_mazes !== null) {
+                /** @type {Array<string>} */
+                let mazes = JSON.parse(saved_mazes);
+                mazes.push(current_maze)
+                sessionStorage.setItem("saved_mazes", JSON.stringify(mazes));
+            } else {
+                /** @type {Array<Maze>} */
+                let mazes = new Array();
+                mazes.push(current_maze);
+                sessionStorage.setItem("saved_mazes", JSON.stringify(mazes));
+            }
         }
     }
     update_latest_saved_mazes();
