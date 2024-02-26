@@ -58,17 +58,17 @@ function update_latest_saved_mazes(){
         let count = mazes.length;
         if (count >= 1){
             let svg = document.querySelector("#latest-saved-maze-1");
-            let maze = Maze.from_string(mazes[count - 1]);
+            let maze = Maze.from_json(mazes[count - 1]);
             maze.draw_maze(svg);
         }
         if (count >= 2){
             let svg = document.querySelector("#latest-saved-maze-2");
-            let maze = Maze.from_string(mazes[count - 2]);
+            let maze = Maze.from_json(mazes[count - 2]);
             maze.draw_maze(svg);
         }
         if (count >= 3){
             let svg = document.querySelector("#latest-saved-maze-3");
-            let maze = Maze.from_string(mazes[count - 3]);
+            let maze = Maze.from_json(mazes[count - 3]);
             maze.draw_maze(svg);
         }
     }
