@@ -49,3 +49,10 @@ Added JavaScript for maze generation, page navigation, logging in and creating a
 - **Database** - Saved mazes are stored in sessionStorage temporarily. Can be viewed on the Saved Mazes page.
 - **WebSocket** - The latest locally saved mazes are displayed in the latest saved mazes temporarily.
 - **Application Logic** - Mazes are generated according to the requested size.
+## Service Deliverable
+Added backend endpoints to receive mazes to save and return the list of saved mazes.
+- **Node.js/Express HTTP service** - Done
+- **Static Middleware for Frontend** - Done
+- **Calls to Third Part Endpoints** - Added a quote to the footer using the same third party endpoints as simon.
+- **Backend Service Endpoints** - For now stores only one list of saved mazes without differentiating between users. Has endpoints for saving mazes and retrieving the list of saved mazes.
+- **Frontend calls Servide Endpoints** - Frontend uses fetch to save mazes and retrieve the list of saved mazes. Uses seesionStorage as a backup in case the request fails.
