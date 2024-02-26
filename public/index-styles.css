@@ -95,6 +95,11 @@ form {
     align-self: center;
 }
 
+#quote {
+    flex: 1;
+    text-align: right;
+}
+
 @media (orientation: portrait) {
     #latest-saved-mazes-div {
         width: 100%;

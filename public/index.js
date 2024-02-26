@@ -76,3 +76,11 @@ function update_latest_saved_mazes(){
 
 document.querySelector("#generate-button").addEventListener('click', generate_maze_clicked);
 document.querySelector("#save-button").addEventListener('click', save_maze_clicked);
+
+fetch('https://api.quotable.io/random')
+.then((response) => response.json())
+.then((data) => {
+    /** @type { HTMLDivElement } */
+    const quote_element = document.querySelector('#quote');
+    quote_element.textContent = data.content;
+});
