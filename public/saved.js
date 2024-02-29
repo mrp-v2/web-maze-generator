@@ -8,10 +8,13 @@ async function delete_maze_pressed(event) {
     /** @type {string} */
     let target = event.target.id;
     let index = Number(target.substring(11, target.length - 7));
+    /** @type { Array } */
+    const mazes = JSON.parse(localStorage.getItem('saved_mazes'))
+
     await fetch('/api/delete_maze', {
         method: 'POST',
-        headers: {'content-type': 'application/json'},
-        body: JSON.stringify({ index: index })
+        headers: {'content-type': 'application/json; charset=UTF-8'},
+        body: JSON.stringify(mazes[index])
     })
     await update_mazes();
 }
@@ -52,13 +55,13 @@ async function update_mazes() {
         main.removeChild(main.firstChild);
     }
     /** @type {Array<string>} */
-    let saved_mazes = JSON.parse(sessionStorage.getItem("saved_mazes"));
-    const response = await fetch('/api/saved_mazes', {
+    let saved_mazes = JSON.parse(localStorage.getItem("saved_mazes"));
+    const response = await fetch(`/api/mazes/${localStorage.getItem('username')}`, {
         method: 'GET'
     });
     if (response.ok){
         saved_mazes = await response.json();
-        sessionStorage.setItem("saved_mazes", JSON.stringify(saved_mazes));
+        localStorage.setItem("saved_mazes", JSON.stringify(saved_mazes));
     }
     if (saved_mazes !== null){
         let mazes = saved_mazes;
@@ -68,4 +71,8 @@ async function update_mazes() {
     }
 }
 
-update_mazes();
+if (localStorage.getItem('username')){
+    update_mazes();
+} else {
+    window.location.href = 'login.html'
+}
