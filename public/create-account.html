@@ -7,17 +7,15 @@
         <link rel="icon" href="icon.png" />
         <link rel="stylesheet" type="text/css" href="universal-styles.css">
         <link rel="stylesheet" type="text/css" href="login-styles.css">
-        <script src="saved-mazes-button.js"></script>
         <script src="create-account.js"></script>
     </head>
     <body>
         <header>
             <h1><a href="index.html">Web Maze Generator</a></h1>
             <div class="header-filler"></div>
-            <div class="button-div"><button type="button" onclick="saved_mazes_clicked()">Saved Mazes</button></div>
         </header>
         <main>
-            <form>
+            <div>
                 <div>
                     <label for="username">Username:</label>
                     <input id="username" type="text" placeholder="username" />
@@ -27,13 +25,9 @@
                     <input id="password" type="password" placeholder="password" />
                 </div>
                 <div>
-                    <label for="password-repeat">Repeat Password:</label>
-                    <input id="password-repeat" type="password" placeholder="password" />    
-                </div>
-                <div>
                     <div class="button-div"><button onclick="create_account()">Create Account</button></div>
                 </div>
-            </form>
+            </div>
         </main>
         <footer>
             Matthew Partington<br>
