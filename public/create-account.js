@@ -1,13 +1,24 @@
-function create_account() {
-    const username = document.querySelector("#username");
-    if (username.value === "") {
+async function create_account() {
+    const username = document.querySelector("#username").value;
+    if (username === "") {
         return;
     }
-    const password = document.querySelector("#password");
-    if (password.value === "") {
+    const password = document.querySelector("#password").value;
+    if (password === "") {
         return;
     }
-    sessionStorage.setItem("username", username.value);
-    sessionStorage.setItem("password", password.value);
-    window.location.href = "saved.html";
+    const response = await fetch('/api/auth/create', {
+        method: 'POST',
+        headers: {
+            'content-type': 'application/json; charset=UTF-8'
+        },
+        body: JSON.stringify({
+            username: username,
+            password: password
+        })
+    });
+    if (response.ok){
+        localStorage.setItem("username", username);
+        window.location.href = "saved.html";
+    }
 }
