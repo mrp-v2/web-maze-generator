@@ -37,11 +37,25 @@ async function create_user(username, password) {
 }
 
 async function save_maze(token, maze) {
-    return (await get_user_by_token(token)).mazes.push(maze);
+    const user = await get_user_by_token(token);
+    /** @type { Array } */
+    const mazes = user.mazes;
+    mazes.push(maze);
+    const result = await user_collection.updateOne({token: token}, {
+        $set: {
+            mazes: mazes
+        }
+    })
+    if (result && result.modifiedCount > 0){
+        return mazes;
+    } else {
+        return null;
+    }
 }
 
 async function get_mazes(username) {
-    return (await get_user(username)).mazes;
+    const user  = await get_user(username);
+    return user.mazes;
 }
 
 async function get_mazes_by_token(token) {
@@ -50,13 +64,21 @@ async function get_mazes_by_token(token) {
 
 async function delete_maze(token, maze) {
     /** @type { Array } */
-    const mazes = (await get_user_by_token(token)).mazes;
+    const user = await get_user_by_token(token);
+    const mazes = user.mazes;
     let remove_index = mazes.indexOf(maze);
     if (remove_index >= 0){
         mazes.splice(remove_index)
-        return true;
+        const result = await user_collection.updateOne({token: token}, {
+            $set: {
+                mazes: mazes
+            }
+        });
+        if (result && result.modifiedCount > 0){
+            return mazes;
+        }
     }
-    return false;
+    return null;
 }
 
 module.exports = {

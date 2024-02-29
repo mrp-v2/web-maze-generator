@@ -55,7 +55,7 @@ api_router.get('/user/:username', async (req, res) => {
 });
 
 api_router.get('/mazes/:username', async (req, res) => {
-    res.send(database.get_mazes(req.params.username));
+    res.send(await database.get_mazes(req.params.username));
 });
 
 let secure_api_router = express.Router();
@@ -72,13 +72,13 @@ secure_api_router.use(async (req, res, next) => {
 });
 
 secure_api_router.post('/save_maze', async (req, res) => {
-    database.save_maze(req.cookies[auth_cookie_name], req.body)
-    res.send(database.get_mazes_by_token(req.cookies[auth_cookie_name]));
+    await database.save_maze(req.cookies[auth_cookie_name], req.body)
+    res.send(await database.get_mazes_by_token(req.cookies[auth_cookie_name]));
 });
 
 secure_api_router.post('/delete_maze', async (req, res) => {
-    database.delete_maze(req.cookies[auth_cookie_name], red.body);
-    res.end();
+    await database.delete_maze(req.cookies[auth_cookie_name], req.body);
+    res.send(await database.get_mazes_by_token(req.cookies[auth_cookie_name]));
 });
 
 app.use(function (err, req, res, next) {
