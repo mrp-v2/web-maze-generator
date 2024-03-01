@@ -44,7 +44,7 @@ api_router.delete('/auth/logout', (req, res) => {
     res.status(204).end();
 });
 
-api_router.get('/user/:username', async (req, res) => {
+api_router.get('/auth/user/:username', async (req, res) => {
     const user = await database.get_user(req.params.username);
     if (user){
         const token = req?.cookies.token;

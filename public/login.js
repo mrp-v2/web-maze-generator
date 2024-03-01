@@ -1,7 +1,7 @@
 (async () => {
     const username = localStorage.getItem('username');
     if (username){
-        document.querySelector('#username').textContent = username;
+        document.querySelector('#username').value = username;
     }
 })();
 
