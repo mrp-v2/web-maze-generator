@@ -19,7 +19,7 @@ function generate_maze_clicked() {
     }
     const maze = Maze.generate_maze(width, height);
     maze.draw_maze(document.querySelector("#generated-maze-canvas"));
-    sessionStorage.setItem("current_maze", maze.to_string());
+    sessionStorage.setItem("current_maze", maze.to_json_string());
 }
 
 async function save_maze_clicked() {
