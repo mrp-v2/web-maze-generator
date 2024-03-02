@@ -77,8 +77,7 @@ secure_api_router.post('/save_maze', async (req, res) => {
 });
 
 secure_api_router.post('/delete_maze', async (req, res) => {
-    await database.delete_maze(req.cookies[auth_cookie_name], req.body);
-    res.send(await database.get_mazes_by_token(req.cookies[auth_cookie_name]));
+    res.send(await database.delete_maze(req.cookies[auth_cookie_name], req.body))
 });
 
 app.use(function (err, req, res, next) {
