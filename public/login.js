@@ -26,6 +26,9 @@ async function login_clicked() {
     });
     if (response.ok){
         localStorage.setItem("username", username);
-        window.location.href = "saved.html";
+        const url = new URL(window.location.href);
+        if (url.searchParams.has('post_authenticate_page')){
+            window.location.href = url.searchParams.get('post_authenticate_page');
+        }
     }
 }

@@ -1,4 +1,8 @@
 import { Maze } from './modules/maze.js';
+import { login, is_logged_in } from './modules/auth.js'
+
+const page_load_name = 'post_page_load_action';
+const save_action_name = 'save';
 
 function generate_maze_clicked() {
     /** @type {number} */
@@ -22,7 +26,7 @@ function generate_maze_clicked() {
     sessionStorage.setItem("current_maze", maze.to_json_string());
 }
 
-async function save_maze_clicked() {
+async function save_maze() {
     let current_maze = sessionStorage.getItem("current_maze");
     if (current_maze !== null) {
         const response = await fetch('/api/save_maze', {
@@ -50,6 +54,14 @@ async function save_maze_clicked() {
     update_latest_saved_mazes();
 }
 
+async function save_maze_clicked() {
+    if (await is_logged_in()){
+        await save_maze();
+    } else {
+        login(`index.html?${page_load_name}=${save_action_name}`);
+    }
+}
+
 function update_latest_saved_mazes(){
     let saved_mazes = localStorage.getItem("saved_mazes");
     if (saved_mazes !== null){
@@ -74,13 +86,35 @@ function update_latest_saved_mazes(){
     }
 }
 
-document.querySelector("#generate-button").addEventListener('click', generate_maze_clicked);
-document.querySelector("#save-button").addEventListener('click', save_maze_clicked);
+(async () => {
+    document.querySelector("#generate-button").addEventListener('click', generate_maze_clicked);
+    document.querySelector("#save-button").addEventListener('click', save_maze_clicked);
 
-fetch('https://api.quotable.io/random')
-.then((response) => response.json())
-.then((data) => {
-    /** @type { HTMLDivElement } */
-    const quote_element = document.querySelector('#quote');
-    quote_element.textContent = data.content;
-});
+    let current_maze = sessionStorage.getItem('current_maze');
+    if (current_maze != null) {
+        const maze = Maze.from_string(current_maze);
+        maze.draw_maze(document.querySelector('#generated-maze-canvas'));
+    }
+
+    const url = new URL(window.location.href);
+    if (url.searchParams.has(page_load_name)){
+        switch (url.searchParams.get(page_load_name)){
+            case save_action_name:
+                await save_maze_clicked();
+                break;
+            default:
+                break;
+        }
+        window.location.href = 'index.html';
+    }
+
+    update_latest_saved_mazes();
+
+    fetch('https://api.quotable.io/random')
+    .then((response) => response.json())
+    .then((data) => {
+        /** @type { HTMLDivElement } */
+        const quote_element = document.querySelector('#quote');
+        quote_element.textContent = data.content;
+    });
+})();
