@@ -75,7 +75,7 @@ async function delete_maze(token, maze) {
     const mazes = user.mazes;
     let remove_index = mazes.findIndex((element) => { return JSON.stringify(maze) === JSON.stringify(element) });
     if (remove_index >= 0){
-        mazes.splice(remove_index)
+        mazes.splice(remove_index, 1);
         const result = await user_collection.updateOne({token: token}, {
             $set: {
                 mazes: mazes
