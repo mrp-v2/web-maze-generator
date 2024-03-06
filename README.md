@@ -56,3 +56,10 @@ Added backend endpoints to receive mazes to save and return the list of saved ma
 - **Calls to Third Part Endpoints** - Added a quote to the footer using the same third party endpoints as simon.
 - **Backend Service Endpoints** - For now stores only one list of saved mazes without differentiating between users. Has endpoints for saving mazes and retrieving the list of saved mazes.
 - **Frontend calls Servide Endpoints** - Frontend uses fetch to save mazes and retrieve the list of saved mazes. Uses seesionStorage as a backup in case the request fails.
+## DataBase & Login Deliverable
+- **MongoDB** - ✔️
+- **Stores Data in DataBase** - Stores accounts and their saved mazes in the database.
+- **User Registration** - Accountsare created and stored in the database.
+- **Existing User** - Disallows duplicate users, and allows signing in to an account that was created previously.
+- **Credentials Stored in MongoDB** - Stores usernames and password hashes in the database.
+- **Restricts Functionality** - Mazes cannot be saved unless the user is logged in, and saved mazes can't be viewed unless the user is logged in.
