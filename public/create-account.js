@@ -1,4 +1,4 @@
-import { attempt_auth } from "./modules/auth";
+import { attempt_auth } from "./modules/auth.js";
 
 async function create_account() {
     const username = document.querySelector("#username").value;
