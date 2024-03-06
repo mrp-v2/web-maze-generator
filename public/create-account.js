@@ -1,24 +1,17 @@
+import { attempt_auth } from "./modules/auth";
+
 async function create_account() {
     const username = document.querySelector("#username").value;
-    if (username === "") {
+    if (username == "") {
         return;
     }
     const password = document.querySelector("#password").value;
-    if (password === "") {
+    if (password == "") {
         return;
     }
-    const response = await fetch('/api/auth/create', {
-        method: 'POST',
-        headers: {
-            'content-type': 'application/json; charset=UTF-8'
-        },
-        body: JSON.stringify({
-            username: username,
-            password: password
-        })
-    });
-    if (response.ok){
-        localStorage.setItem("username", username);
-        window.location.href = "saved.html";
-    }
+    attempt_auth('create', username, password);
 }
+
+(() => {
+    document.querySelector('#create_account').addEventListener('click', create_account);
+})();

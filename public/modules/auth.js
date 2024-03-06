@@ -25,3 +25,23 @@ export async function ensure_logged_in(post_authenticate_page) {
 export function login(post_authenticate_page){
     window.location.href = `login.html?post_authenticate_page=${post_authenticate_page}`;
 }
+
+export async function attempt_auth(url, username, password) {
+    const response = await fetch(`/api/auth/${url}`, {
+        method: 'POST',
+        headers: {
+            'content-type': 'application/json; charset=UTF-8'
+        },
+        body: JSON.stringify({
+            username: username,
+            password: password
+        })
+    });
+    if (response.ok){
+        localStorage.setItem("username", username);
+        const url = new URL(window.location.href);
+        if (url.searchParams.has('post_authenticate_page')){
+            window.location.href = url.searchParams.get('post_authenticate_page');
+        }
+    }
+}
