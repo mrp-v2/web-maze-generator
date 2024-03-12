@@ -1,8 +1,11 @@
 import { Maze } from './modules/maze.js';
-import { login, is_logged_in } from './modules/auth.js'
+import { login, is_logged_in } from './modules/auth.js';
 
 const page_load_name = 'post_page_load_action';
 const save_action_name = 'save';
+
+const protocol = window.location.protocol === 'http:' ? 'ws' : 'wss';
+const socket = new WebSocket(`${protocol}://${window.location.host}/ws`);
 
 function generate_maze_clicked() {
     /** @type {number} */
@@ -34,22 +37,6 @@ async function save_maze() {
             headers: {'content-type': 'application/json; charset=UTF-8'},
             body: current_maze
         });
-        if (response.ok) {
-            localStorage.setItem("saved_mazes", JSON.stringify(await response.json()));
-        } else {
-            let saved_mazes = localStorage.getItem("saved_mazes");
-            if (saved_mazes !== null) {
-                /** @type {Array<string>} */
-                let mazes = JSON.parse(saved_mazes);
-                mazes.push(current_maze)
-                localStorage.setItem("saved_mazes", JSON.stringify(mazes));
-            } else {
-                /** @type {Array<Maze>} */
-                let mazes = new Array();
-                mazes.push(current_maze);
-                localStorage.setItem("saved_mazes", JSON.stringify(mazes));
-            }
-        }
     }
     update_latest_saved_mazes();
 }
@@ -62,27 +49,28 @@ async function save_maze_clicked() {
     }
 }
 
-function update_latest_saved_mazes(){
-    let saved_mazes = localStorage.getItem("saved_mazes");
-    if (saved_mazes !== null){
-        /** @type {Array<string>} */
-        let mazes = JSON.parse(saved_mazes);
-        let count = mazes.length;
-        if (count >= 1){
-            let svg = document.querySelector("#latest-saved-maze-1");
-            let maze = Maze.from_json(mazes[count - 1]);
-            maze.draw_maze(svg);
-        }
-        if (count >= 2){
-            let svg = document.querySelector("#latest-saved-maze-2");
-            let maze = Maze.from_json(mazes[count - 2]);
-            maze.draw_maze(svg);
-        }
-        if (count >= 3){
-            let svg = document.querySelector("#latest-saved-maze-3");
-            let maze = Maze.from_json(mazes[count - 3]);
-            maze.draw_maze(svg);
-        }
+async function update_latest_saved_mazes(){
+    const response = await fetch('/api/mazes/latest', {
+        method: 'GET'
+    });
+    if (!response.ok){
+        return;
+    }
+    const mazes = await response.json();
+    if (mazes[0]){
+        let svg = document.querySelector("#latest-saved-maze-1");
+        let maze = Maze.from_json(mazes[0]);
+        maze.draw_maze(svg);
+    }
+    if (mazes[1]){
+        let svg = document.querySelector("#latest-saved-maze-2");
+        let maze = Maze.from_json(mazes[1]);
+        maze.draw_maze(svg);
+    }
+    if (mazes[2]){
+        let svg = document.querySelector("#latest-saved-maze-3");
+        let maze = Maze.from_json(mazes[2]);
+        maze.draw_maze(svg);
     }
 }
 
@@ -108,8 +96,6 @@ function update_latest_saved_mazes(){
         window.location.href = 'index.html';
     }
 
-    update_latest_saved_mazes();
-
     fetch('https://api.quotable.io/random')
     .then((response) => response.json())
     .then((data) => {
@@ -117,4 +103,13 @@ function update_latest_saved_mazes(){
         const quote_element = document.querySelector('#quote');
         quote_element.textContent = data.content;
     });
+
+    socket.onmessage = async (event) => {
+        const message = JSON.parse(await event.data.text());
+        if (message.type === 'update_latest_mazes'){
+            update_latest_saved_mazes();
+        }
+    };
+
+    update_latest_saved_mazes();
 })();

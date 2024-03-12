@@ -55,18 +55,13 @@ async function update_mazes() {
         main.removeChild(main.firstChild);
     }
     /** @type {Array<string>} */
-    let saved_mazes = JSON.parse(localStorage.getItem('saved_mazes'));
     const response = await fetch(`/api/mazes/${localStorage.getItem('username')}`, {
         method: 'GET'
     });
     if (response.ok){
-        saved_mazes = await response.json();
-        localStorage.setItem('saved_mazes', JSON.stringify(saved_mazes));
-    }
-    if (saved_mazes !== null){
-        const mazes = saved_mazes;
-        for (let i in saved_mazes){
-            add_maze(Maze.from_json(mazes[i]), `saved-maze-${i}`);
+        const saved_mazes = await response.json();
+        for (let i in saved_mazes) {
+            add_maze(Maze.from_json(saved_mazes[i]), `saved-maze-${i}`);
         }
     }
 }
