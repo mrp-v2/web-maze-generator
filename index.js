@@ -1,16 +1,56 @@
 const cookie_parser = require('cookie-parser');
 const bcrypt = require('bcrypt');
 const express = require('express');
+const uuid = require('uuid');
 const app = express();
-const database = require('./database.js')
+const database = require('./database.js');
+const { WebSocketServer } = require('ws');
 
 const auth_cookie_name = 'auth_token';
 
 const port = process.argv.length > 2 ? process.argv[2] : 4000;
 
+let connections = [];
+
 app.use(express.json());
 app.use(cookie_parser());
 app.use(express.static('public'));
+
+const web_socket = new WebSocketServer({noServer: true});
+app.param('upgrade', (req, socket, head) => {
+    web_socket.handleUpgrade(request, socket, head, function done(ws) {
+        web_socket.emit('connection', ws, request);
+    });
+});
+
+web_socket.on('connection', (socket) => {
+    const connection = { id: uuid.v4(), alive: true, socket: socket };
+    connections.push(connection);
+
+    socket.on('close', () => {
+        connections.findIndex((o, i) => {
+            if (o.id === connection.id) {
+                connections.splice(i, 1);
+                return true;
+            }
+        })
+    });
+
+    socket.on('pong', () => {
+        connection.alive = true;
+    })
+});
+
+setInterval(() => {
+    connections.forEach((c) => {
+        if (!c.alive) {
+            c.socket.terminate();
+        } else {
+            c.alive = false;
+            c.socket.ping();
+        }
+    });
+}, 10000);
 
 const api_router = express.Router();
 app.use('/api', api_router);
@@ -54,6 +94,10 @@ api_router.get('/auth/user/:username', async (req, res) => {
     res.status(401).send({ msg: 'User does not exist' });
 });
 
+api_router.get('/mazes/latest', (req, res) => {
+    res.send(database.get_latest_saved_mazes());
+});
+
 api_router.get('/mazes/:username', async (req, res) => {
     res.send(await database.get_mazes(req.params.username));
 });
@@ -74,6 +118,9 @@ secure_api_router.use(async (req, res, next) => {
 secure_api_router.post('/save_maze', async (req, res) => {
     await database.save_maze(req.cookies[auth_cookie_name], req.body)
     res.send(await database.get_mazes_by_token(req.cookies[auth_cookie_name]));
+    connections.forEach((c) => {
+        c.socket.send({ type: 'update_latest_mazes' });
+    })
 });
 
 secure_api_router.post('/delete_maze', async (req, res) => {
