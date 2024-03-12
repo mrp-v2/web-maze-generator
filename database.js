@@ -7,6 +7,7 @@ const url = `mongodb+srv://${config.userName}:${config.password}@${config.hostna
 const client = new MongoClient(url);
 const database = client.db('mazes');
 const user_collection = database.collection('user');
+let latest_saved_mazes = [];
 
 (async function test_connection(){
     await client.connect();
@@ -47,10 +48,15 @@ async function save_maze(token, maze) {
         }
     })
     if (result && result.modifiedCount > 0){
+        latest_saved_mazes = [maze, latest_saved_mazes[0], latest_saved_mazes[1]];
         return mazes;
     } else {
         return null;
     }
+}
+
+function get_latest_saved_mazes(){
+    return latest_saved_mazes;
 }
 
 async function get_mazes(username) {
@@ -92,5 +98,5 @@ async function delete_maze(token, maze) {
 }
 
 module.exports = {
-    get_user, get_user_by_token, create_user, save_maze, get_mazes, get_mazes_by_token, delete_maze
+    get_user, get_user_by_token, create_user, save_maze, get_mazes, get_mazes_by_token, delete_maze, get_latest_saved_mazes
 }
