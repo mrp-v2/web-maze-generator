@@ -17,11 +17,6 @@ app.use(cookie_parser());
 app.use(express.static('public'));
 
 const web_socket = new WebSocketServer({noServer: true});
-app.param('upgrade', (req, socket, head) => {
-    web_socket.handleUpgrade(request, socket, head, function done(ws) {
-        web_socket.emit('connection', ws, request);
-    });
-});
 
 web_socket.on('connection', (socket) => {
     const connection = { id: uuid.v4(), alive: true, socket: socket };
@@ -119,12 +114,12 @@ secure_api_router.post('/save_maze', async (req, res) => {
     await database.save_maze(req.cookies[auth_cookie_name], req.body)
     res.send(await database.get_mazes_by_token(req.cookies[auth_cookie_name]));
     connections.forEach((c) => {
-        c.socket.send({ type: 'update_latest_mazes' });
+        c.socket.send(JSON.stringify({ type: 'update_latest_mazes' }));
     })
 });
 
 secure_api_router.post('/delete_maze', async (req, res) => {
-    res.send(await database.delete_maze(req.cookies[auth_cookie_name], req.body))
+    res.send(await database.delete_maze(req.cookies[auth_cookie_name], req.body.index))
 });
 
 app.use(function (err, req, res, next) {
@@ -143,6 +138,12 @@ function set_auth_cookie(res, auth_token) {
     });
 }
 
-app.listen(port, () => {
+const server = app.listen(port, () => {
     console.log(`listening on port ${port}`);
+});
+
+server.on('upgrade', (req, socket, head) => {
+    web_socket.handleUpgrade(req, socket, head, function done(ws) {
+        web_socket.emit('connection', ws, req);
+    });
 });
