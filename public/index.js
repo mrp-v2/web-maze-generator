@@ -105,7 +105,7 @@ async function update_latest_saved_mazes(){
     });
 
     socket.onmessage = async (event) => {
-        const message = JSON.parse(await event.data.text());
+        const message = JSON.parse(await event.data);
         if (message.type === 'update_latest_mazes'){
             update_latest_saved_mazes();
         }
