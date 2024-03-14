@@ -71,29 +71,27 @@ async function get_mazes_by_token(token) {
 /**
  * 
  * @param {String} token 
- * @param {Object} maze 
+ * @param {Object} maze_index 
  * @returns 
  */
-async function delete_maze(token, maze) {
+async function delete_maze(token, maze_index) {
     /** @type { Array } */
     const user = await get_user_by_token(token);
     /** @type { Array } */
     const mazes = user.mazes;
-    let remove_index = mazes.findIndex((element) => { return JSON.stringify(maze) === JSON.stringify(element) });
-    if (remove_index >= 0){
-        mazes.splice(remove_index, 1);
-        const result = await user_collection.updateOne({token: token}, {
-            $set: {
-                mazes: mazes
-            }
-        });
-        if (result && result.modifiedCount > 0){
-            return mazes;
-        } else {
-            throw Error("Error trying to remove requested maze from database.");
+    if (maze_index < 0 || maze_index >= mazes.length){
+        throw Error("maze index out of bounds");
+    }
+    mazes.splice(maze_index, 1);
+    const result = await user_collection.updateOne({token: token}, {
+        $set: {
+            mazes: mazes
         }
+    });
+    if (result && result.modifiedCount > 0){
+        return mazes;
     } else {
-        throw Error("Unable to find requested maze to delete in saved mazes.");
+        throw Error("Error trying to remove requested maze from database.");
     }
 }
 
