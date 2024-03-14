@@ -96,14 +96,6 @@ async function update_latest_saved_mazes(){
         window.location.href = 'index.html';
     }
 
-    fetch('https://api.quotable.io/random')
-    .then((response) => response.json())
-    .then((data) => {
-        /** @type { HTMLDivElement } */
-        const quote_element = document.querySelector('#quote');
-        quote_element.textContent = data.content;
-    });
-
     socket.onmessage = async (event) => {
         const message = JSON.parse(await event.data);
         if (message.type === 'update_latest_mazes'){
