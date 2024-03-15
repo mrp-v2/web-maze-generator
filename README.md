@@ -63,3 +63,8 @@ Added backend endpoints to receive mazes to save and return the list of saved ma
 - **Existing User** - Disallows duplicate users, and allows signing in to an account that was created previously.
 - **Credentials Stored in MongoDB** - Stores usernames and password hashes in the database.
 - **Restricts Functionality** - Mazes cannot be saved unless the user is logged in, and saved mazes can't be viewed unless the user is logged in.
+## WebSocket Deliverable
+- **Backend supports a WebSocket connection** - ✔️
+- **Frontend initiates a WebSocket connection** - ✔️
+- **Data sent over WebSocket connection** - WebSocket is used to notify clients that a new maze has been saved by some user.
+- **WebSocket data Displayed** - Recent saved mazes are shown in the main page.
