@@ -9,8 +9,6 @@ export class Maze {
     /** @type {number} */
     #height;
     /** @type {number} */
-    #size;
-    /** @type {number} */
     #fullwidth;
     /** @type {number} */
     #fullheight;
@@ -18,10 +16,9 @@ export class Maze {
     #fullsize;
     /**
      * true for empty, false for blocked
+     * rows then columns
      *  @type {Array<boolean>} */
     #data;
-    /** @type {Array<number>} */
-    #cells_in_maze;
 
     /**
      * 
@@ -32,16 +29,14 @@ export class Maze {
     constructor(width, height, data) {
         this.#width = width;
         this.#height = height;
-        this.#size = this.#width * this.#height;
         this.#fullwidth = this.#width * 2 - 1;
         this.#fullheight = this.#height * 2 - 1;
         this.#fullsize = this.#fullwidth * this.#fullheight;
         this.#data = data;
-        this.#cells_in_maze = Array();
     }
 
     static generate_maze(width, height) {
-        let maze = new Maze(width, height, Array(width * height));
+        let maze = new Maze(width, height, Array());
         maze.#generate_maze();
         return maze;
     }
@@ -49,13 +44,13 @@ export class Maze {
     /**
      * @returns {number}
      */
-    #get_cell_not_in_maze(){
+    #get_cell_not_in_maze(cells_in_maze){
         for (let i = 0; i < this.#fullsize; i += 2) {
             if (i % this.#fullwidth == 1){
                 i += this.#fullwidth - 3;
                 continue;
             }
-            if (!this.#cells_in_maze.includes(i)) {
+            if (!cells_in_maze.includes(i)) {
                 return i;
             }
         }
@@ -87,21 +82,16 @@ export class Maze {
     }
 
     #generate_maze() {
+        const temp_data = Array();
         /** @type {Array<number>} */
-        for (let i = 0; i < this.#fullsize; i += 2) {
-            if (i % this.#fullwidth == 1) {
-                i += this.#fullwidth - 3;
-                continue;
-            }
-            this.#data[i] = true;
-        }
-        this.#cells_in_maze.push(this.#get_cell_not_in_maze());
-        let cell_not_in_maze = this.#get_cell_not_in_maze();
+        const cells_in_maze = Array();
+        cells_in_maze.push(this.#get_cell_not_in_maze(cells_in_maze));
+        let cell_not_in_maze = this.#get_cell_not_in_maze(cells_in_maze);
         while (cell_not_in_maze != -1) {
             /** @type {Array<number>} */
             const path = Array();
             path.push(cell_not_in_maze);
-            while (!this.#cells_in_maze.includes(path[path.length - 1])){
+            while (!cells_in_maze.includes(path[path.length - 1])){
                 let next = this.#get_random_neighbor_cell(path[path.length - 1]);
                 if (path.includes(next)){
                     path.length = path.indexOf(next) + 1;
@@ -110,21 +100,39 @@ export class Maze {
                 }
             }
             for (let index = 0; index < path.length - 1; index++){
-                this.#data[(path[index] + path[index + 1]) / 2] = true;
-                this.#cells_in_maze.push(path[index]);
+                temp_data[(path[index] + path[index + 1]) / 2] = true;
+                cells_in_maze.push(path[index]);
             }
-            cell_not_in_maze = this.#get_cell_not_in_maze();
+            cell_not_in_maze = this.#get_cell_not_in_maze(cells_in_maze);
+        }
+        for (let row = 0; row < this.#height; row++){
+            for (let column = 1; column < this.#fullwidth; column += 2){
+                const value = temp_data[row * this.#fullwidth * 2 + column];
+                this.#data.push(typeof value === 'undefined' ? false : value);
+            }
+        }
+        for (let column = 0; column < this.#width; column++){
+            for (let row = 1; row < this.#fullheight; row += 2){
+                const value = temp_data[row * this.#fullwidth + column * 2];
+                this.#data.push(typeof value === 'undefined' ? false : value);
+            }
         }
     }
 
-    #draw_cell(x, y) {
+    #draw_cell_raw(x, y, width, height, fill) {
         const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
         rect.setAttribute("x", x);
         rect.setAttribute("y", y);
-        rect.setAttribute("width", 1);
-        rect.setAttribute("height", 1);
-        rect.setAttribute("fill", empty_color);
+        rect.setAttribute("width", width);
+        rect.setAttribute("height", height);
+        rect.setAttribute("fill", fill);
         return rect;
+    }
+
+    #draw_cell(i, width = 1, height = 1, fill = empty_color) {
+        const x = i % this.#fullwidth + 1;
+        const y = Math.floor(i / this.#fullwidth) + 1;
+        return this.#draw_cell_raw(x, y, width, height, fill)
     }
 
     /**
@@ -135,19 +143,29 @@ export class Maze {
         /** @type {Array<Node>} */
         const nodes = Array();
         svg.setAttribute("viewBox", `0 0 ${this.#fullwidth + 2} ${this.#fullheight + 2}`);
-        const background = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-        background.setAttribute("x", 0);
-        background.setAttribute("y", 0);
-        background.setAttribute("width", this.#fullwidth + 2);
-        background.setAttribute("height", this.#fullheight + 2);
-        background.setAttribute("fill", blocked_color);
-        nodes.push(background);
-        // draws constant cell grid
-        for (let i = 0; i < this.#fullsize; i++) {
-            if (this.#data[i]){
-                const x = i % this.#fullwidth + 1;
-                const y = Math.floor(i / this.#fullwidth) + 1;
-                nodes.push(this.#draw_cell(x, y));
+        // draw background
+        nodes.push(this.#draw_cell_raw(0, 0, this.#fullwidth + 2, this.#fullheight + 2, blocked_color));
+        // draw cell grid
+        for (let i = 0; i < this.#fullsize; i += 2) { 
+            if (i % this.#fullwidth == 1) { 
+                i += this.#fullwidth - 1;
+            }
+            nodes.push(this.#draw_cell(i))
+        }
+        // draw connections
+        let index = 0;
+        for (let row = 0; row < this.#height; row++){
+            for (let column = 1; column < this.#fullwidth; column += 2){
+                if (this.#data[index++]){
+                    nodes.push(this.#draw_cell(row * this.#fullwidth * 2 + column));
+                }
+            }
+        }
+        for (let column = 0; column < this.#width; column++){
+            for (let row = 1; row < this.#fullheight; row += 2){
+                if (this.#data[index++]){
+                    nodes.push(this.#draw_cell(row * this.#fullwidth + column * 2));
+                }
             }
         }
         svg.replaceChildren(...nodes);
@@ -195,21 +213,10 @@ export class Maze {
     }
 
     #encode_maze() {
-        const minimum_data = Array();
-        for (let row = 0; row < this.#height; row++){
-            for (let column = 1; column < this.#fullwidth; column += 2){
-                minimum_data.push(this.#data[row * this.#fullwidth * 2 + column]);
-            }
-        }
-        for (let column = 0; column < this.#width; column++){
-            for (let row = 1; row < this.#fullheight; row += 2){
-                minimum_data.push(this.#data[row * this.#fullwidth + column * 2]);
-            }
-        }
         const scheme = this.#calculate_encoding_scheme();
         let encoded_data = "";
-        for (let start_index = 0; start_index < minimum_data.length; start_index += scheme){
-            encoded_data += this.#encode_part(minimum_data.slice(start_index, start_index + scheme), scheme);
+        for (let start_index = 0; start_index < this.#data.length; start_index += scheme){
+            encoded_data += this.#encode_part(this.#data.slice(start_index, start_index + scheme), scheme);
         }
         return {
             data: encoded_data,
@@ -251,29 +258,10 @@ export class Maze {
         const full_height = maze_json.height * 2 - 1;
         const full_size = full_width * full_height;
         const data = Array();
-        for (let i = 0; i < full_size; i += 2) {
-            if (i % full_width == 1) {
-                i += full_width - 3;
-                continue;
-            }
-            data[i] = true;
-        }
-        const minimum_data = Array();
         for (let i = maze_json.data.data.length - 1; i >= 0; i--) {
-            Maze.#decode_part(maze_json.data.data[i], maze_json.data.scheme, minimum_data);
+            Maze.#decode_part(maze_json.data.data[i], maze_json.data.scheme, data);
         }
-        minimum_data.reverse()
-        let index = 0;
-        for (let row = 0; row < maze_json.height; row++){
-            for (let column = 1; column < full_width; column += 2){
-                data[row * full_width * 2 + column] = minimum_data[index++];
-            }
-        }
-        for (let column = 0; column < maze_json.width; column++){
-            for (let row = 1; row < full_height; row += 2){
-                data[row * full_width + column * 2] = minimum_data[index++];
-            }
-        }
+        data.reverse();
         return data;
     }
 
