@@ -1,149 +1,107 @@
-const cookie_parser = require('cookie-parser');
-const bcrypt = require('bcrypt');
-const express = require('express');
-const uuid = require('uuid');
-const app = express();
-const database = require('./database.js');
-const { WebSocketServer } = require('ws');
+import { Maze } from './modules/maze.js';
+import { login, is_logged_in } from './modules/auth.js';
 
-const auth_cookie_name = 'auth_token';
+const page_load_name = 'post_page_load_action';
+const save_action_name = 'save';
 
-const port = process.argv.length > 2 ? process.argv[2] : 4000;
+const protocol = window.location.protocol === 'http:' ? 'ws' : 'wss';
+const socket = new WebSocket(`${protocol}://${window.location.host}/ws`);
 
-let connections = [];
-
-app.use(express.json());
-app.use(cookie_parser());
-app.use(express.static('public'));
-
-const web_socket = new WebSocketServer({noServer: true});
-
-web_socket.on('connection', (socket) => {
-    const connection = { id: uuid.v4(), alive: true, socket: socket };
-    connections.push(connection);
-
-    socket.on('close', () => {
-        connections.findIndex((o, i) => {
-            if (o.id === connection.id) {
-                connections.splice(i, 1);
-                return true;
-            }
-        })
-    });
-
-    socket.on('pong', () => {
-        connection.alive = true;
-    })
-});
-
-setInterval(() => {
-    connections.forEach((c) => {
-        if (!c.alive) {
-            c.socket.terminate();
-        } else {
-            c.alive = false;
-            c.socket.ping();
-        }
-    });
-}, 10000);
-
-const api_router = express.Router();
-app.use('/api', api_router);
-
-api_router.post('/auth/create', async (req, res) => {
-    if (await database.get_user(req.body.username)){
-        res.status(409).send({msg: 'User already exists'});
-    } else {
-        const user = await database.create_user(req.body.username, req.body.password);
-        set_auth_cookie(res, user.token);
-        res.send({
-            id: user._id
-        });
+function generate_maze_clicked() {
+    /** @type {number} */
+    let width = document.querySelector("#width-input").value;
+    if (width < 5){
+        width = 5;
     }
-});
-
-api_router.post('/auth/login', async (req, res) => {
-    const user = await database.get_user(req.body.username);
-    if (user){
-        if (await bcrypt.compare(req.body.password, user.password)) {
-            set_auth_cookie(res, user.token);
-            res.send({id: user._id});
-            return;
-        }
+    else if (width > 50){
+        width = 50;
     }
-    res.status(401).send({ msg: 'Invalid auth token'});
-});
-
-api_router.delete('/auth/logout', (req, res) => {
-    res.clearCookie(auth_cookie_name);
-    res.status(204).end();
-});
-
-api_router.get('/auth/user/:username', async (req, res) => {
-    const user = await database.get_user(req.params.username);
-    if (user){
-        const token = req?.cookies[auth_cookie_name];
-        res.send({ username: user.username, authenticated: token == user.token });
-        return;
+    /** @type {number} */
+    let height = document.querySelector("#height-input").value;
+    if (height < 5){
+        height = 5;
     }
-    res.status(401).send({ msg: 'User does not exist' });
-});
-
-api_router.get('/mazes/latest', (req, res) => {
-    res.send(database.get_latest_saved_mazes());
-});
-
-api_router.get('/mazes/:username', async (req, res) => {
-    res.send(await database.get_mazes(req.params.username));
-});
-
-let secure_api_router = express.Router();
-api_router.use(secure_api_router);
-
-secure_api_router.use(async (req, res, next) => {
-    auth_token = req.cookies[auth_cookie_name];
-    const user = await database.get_user_by_token(auth_token);
-    if (user) {
-        next();
-    } else {
-        res.status(401).send({ msg: 'Unauthorized' });
+    else if (height > 50){
+        height = 50;
     }
-});
-
-secure_api_router.post('/save_maze', async (req, res) => {
-    await database.save_maze(req.cookies[auth_cookie_name], req.body)
-    res.send(await database.get_mazes_by_token(req.cookies[auth_cookie_name]));
-    connections.forEach((c) => {
-        c.socket.send(JSON.stringify({ type: 'update_latest_mazes' }));
-    })
-});
-
-secure_api_router.post('/delete_maze', async (req, res) => {
-    res.send(await database.delete_maze(req.cookies[auth_cookie_name], req.body.index))
-});
-
-app.use(function (err, req, res, next) {
-    res.status(500).send({ type: err.name, message: err.message });
-});
-
-app.use((req, res) => {
-    res.sendFile('index.html', { root: 'public' });
-});
-
-function set_auth_cookie(res, auth_token) {
-    res.cookie(auth_cookie_name, auth_token, {
-        secure: true,
-        httpOnly: true,
-        sameSite: 'strict'
-    });
+    const maze = Maze.generate_maze(width, height);
+    maze.draw_maze(document.querySelector("#generated-maze-canvas"));
+    sessionStorage.setItem("current_maze", maze.to_json_string());
 }
 
-const server = app.listen(port, () => {
-    console.log(`listening on port ${port}`);
-});
+async function save_maze() {
+    let current_maze = sessionStorage.getItem("current_maze");
+    if (current_maze !== null) {
+        const response = await fetch('/api/save_maze', {
+            method: 'POST',
+            headers: {'content-type': 'application/json; charset=UTF-8'},
+            body: current_maze
+        });
+    }
+    update_latest_saved_mazes();
+}
 
-server.on('upgrade', (req, socket, head) => {
-    web_socket.handleUpgrade(req, socket, head, function done(ws) {
-        web_socket.emit('connection', ws, req);
+async function save_maze_clicked() {
+    if (await is_logged_in()){
+        await save_maze();
+    } else {
+        login(`index.html?${page_load_name}=${save_action_name}`);
+    }
+}
+
+async function update_latest_saved_mazes(){
+    const response = await fetch('/api/mazes/latest', {
+        method: 'GET'
     });
-});
+    if (!response.ok){
+        return;
+    }
+    const mazes = await response.json();
+    if (mazes[0]){
+        let svg = document.querySelector("#latest-saved-maze-1");
+        let maze = Maze.from_json(mazes[0]);
+        maze.draw_maze(svg);
+    }
+    if (mazes[1]){
+        let svg = document.querySelector("#latest-saved-maze-2");
+        let maze = Maze.from_json(mazes[1]);
+        maze.draw_maze(svg);
+    }
+    if (mazes[2]){
+        let svg = document.querySelector("#latest-saved-maze-3");
+        let maze = Maze.from_json(mazes[2]);
+        maze.draw_maze(svg);
+    }
+}
+
+(async () => {
+    document.querySelector("#generate-button").addEventListener('click', generate_maze_clicked);
+    document.querySelector("#save-button").addEventListener('click', save_maze_clicked);
+
+    let current_maze = sessionStorage.getItem('current_maze');
+    if (current_maze != null) {
+        const maze = Maze.from_string(current_maze);
+        maze.draw_maze(document.querySelector('#generated-maze-canvas'));
+    }
+
+    const url = new URL(window.location.href);
+    if (url.searchParams.has(page_load_name)){
+        switch (url.searchParams.get(page_load_name)){
+            case save_action_name:
+                await save_maze_clicked();
+                break;
+            default:
+                break;
+        }
+        window.location.href = 'index.html';
+    }
+
+    socket.onmessage = async (event) => {
+        const message = JSON.parse(await event.data);
+        if (message.type === 'update_latest_mazes'){
+            update_latest_saved_mazes();
+        }
+    };
+
+    update_latest_saved_mazes();
+})();
