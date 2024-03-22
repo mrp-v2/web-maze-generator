@@ -8,7 +8,7 @@ function SavedMazesButton({show}){
             <div className='button'><NavLink type='button' to='saved-mazes'>Saved Mazes</NavLink></div>
         );
     } else {
-        return <></>
+        return <></>;
     }
 }
 

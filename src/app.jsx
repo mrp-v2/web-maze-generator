@@ -6,6 +6,7 @@ import { Login } from './auth/login';
 import { CreateAccount } from './auth/create-account';
 import './universal-styles.css';
 import Header from './header';
+import Footer from './footer';
 
 export default function App(){
     return (
@@ -19,6 +20,7 @@ export default function App(){
                 <Route path='/create-account' element={<CreateAccount />} />
                 <Route path='*' element={<NotFound />} />
             </Routes>
+            <Footer />
         </div>
     </BrowserRouter>
     );
