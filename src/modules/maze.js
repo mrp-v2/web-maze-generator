@@ -15,8 +15,8 @@ export class Maze {
     /** @type {number} */
     #fullsize;
     /**
-     * true for empty, false for blocked
-     * rows then columns
+     * True for empty, false for blocked.
+     * Rows then columns.
      *  @type {Array<boolean>} */
     #data;
 
@@ -105,70 +105,27 @@ export class Maze {
             }
             cell_not_in_maze = this.#get_cell_not_in_maze(cells_in_maze);
         }
-        for (let row = 0; row < this.#height; row++){
-            for (let column = 1; column < this.#fullwidth; column += 2){
-                const value = temp_data[row * this.#fullwidth * 2 + column];
-                this.#data.push(typeof value === 'undefined' ? false : value);
-            }
-        }
-        for (let column = 0; column < this.#width; column++){
-            for (let row = 1; row < this.#fullheight; row += 2){
-                const value = temp_data[row * this.#fullwidth + column * 2];
-                this.#data.push(typeof value === 'undefined' ? false : value);
-            }
+        for (let i = 1; i < this.#fullsize; i += 2){
+            const value = temp_data[i];
+            this.#data.push(typeof value === 'undefined' ? false : value);
         }
     }
 
-    #draw_cell_raw(x, y, width, height, fill) {
-        const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-        rect.setAttribute("x", x);
-        rect.setAttribute("y", y);
-        rect.setAttribute("width", width);
-        rect.setAttribute("height", height);
-        rect.setAttribute("fill", fill);
-        return rect;
-    }
-
-    #draw_cell(i, width = 1, height = 1, fill = empty_color) {
-        const x = i % this.#fullwidth + 1;
-        const y = Math.floor(i / this.#fullwidth) + 1;
-        return this.#draw_cell_raw(x, y, width, height, fill)
-    }
-
-    /**
-     * 
-     * @param {SVGElement} svg
-     */
-    draw_maze(svg) {
-        /** @type {Array<Node>} */
-        const nodes = Array();
-        svg.setAttribute("viewBox", `0 0 ${this.#fullwidth + 2} ${this.#fullheight + 2}`);
-        // draw background
-        nodes.push(this.#draw_cell_raw(0, 0, this.#fullwidth + 2, this.#fullheight + 2, blocked_color));
-        // draw cell grid
+    get_maze_positions() { 
+        const positions = Array();
         for (let i = 0; i < this.#fullsize; i += 2) { 
             if (i % this.#fullwidth == 1) { 
                 i += this.#fullwidth - 1;
             }
-            nodes.push(this.#draw_cell(i))
+            positions.push(i);
         }
-        // draw connections
         let index = 0;
-        for (let row = 0; row < this.#height; row++){
-            for (let column = 1; column < this.#fullwidth; column += 2){
-                if (this.#data[index++]){
-                    nodes.push(this.#draw_cell(row * this.#fullwidth * 2 + column));
-                }
+        for (let i = 1; i < this.#fullsize; i += 2) {
+            if (this.#data[index++]) { 
+                positions.push(i);
             }
         }
-        for (let column = 0; column < this.#width; column++){
-            for (let row = 1; row < this.#fullheight; row += 2){
-                if (this.#data[index++]){
-                    nodes.push(this.#draw_cell(row * this.#fullwidth + column * 2));
-                }
-            }
-        }
-        svg.replaceChildren(...nodes);
+        return positions;
     }
 
     /**
@@ -243,6 +200,18 @@ export class Maze {
 
     height(){
         return this.#height;
+    }
+
+    full_width(){
+        return this.#fullwidth;
+    }
+
+    full_height(){
+        return this.#fullheight;
+    }
+
+    full_size(){
+        return this.#fullsize;
     }
 
     /**

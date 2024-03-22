@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width,initial-scale=1" />
+        <title>Web Maze Generator</title>
+        <link rel="icon" href="icon.png" />
+    </head>
+    <body>
+        <main>
+            <aside id="latest-saved-mazes-div">
+                <h2>Latest Mazes Saved</h2>
+                <div id="latest-saved-mazes-mazes-div">
+                    <svg id="latest-saved-maze-1">
+                    </svg>
+                    <svg id="latest-saved-maze-2">
+                    </svg>
+                    <svg id="latest-saved-maze-3">
+                    </svg>
+                </div>
+            </aside>
+            <div id="maze-generation">
+                <div id="maze-generation-controls">
+                    <form>
+                        <div id="input-div">
+                            <div>
+                                <label for="width-input">Width</label>
+                                <input id="width-input" type="number" value="10" min="5" max="50"/>
+                            </div>
+                            <div>
+                                <label for="height-input">Height</label>
+                                <input id="height-input" type="number" value="10" min="5" max="50"/>
+                            </div>
+                        </div>
+                        <div id="button-div">
+                            <div><button type="button" id="generate-button">Generate</button></div>
+                            <div><button type="button" id="save-button">Save</button></div>
+                        </div>
+                    </form>
+                </div>
+                <div id="generated-maze-div">
+                    <svg id="generated-maze-canvas" preserveAspectRatio="xMidYMid meet">
+                    </svg>
+                </div>
+            </div>
+        </main>
+        <footer>
+            Matthew Partington<br>
+            <a href="https://github.com/mrp-v2/web-maze-generator">GitHub</a>
+        </footer>
+    </body>
+    <script type="module" src="index.js"></script>
+    <script type="module" src="saved-mazes-button.js"></script>
+</html>
