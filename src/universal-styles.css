@@ -68,8 +68,11 @@ header button {
     border-color: var(--green);
     margin: 0.25rem;
     font-size: 1.5rem;
-    color: var(--green);
     text-wrap: nowrap;
+}
+
+header button:enabled {
+    color: var(--green);
 }
 
 main {
@@ -115,7 +118,7 @@ button {
 }
 
 @media (hover: hover) {
-    button:hover {
+    button:enabled:hover {
         background-color: var(--white-1);
     }
 }
