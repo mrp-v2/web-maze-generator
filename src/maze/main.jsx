@@ -19,7 +19,11 @@ export function Main() {
     };
 
     const save = () => {
-
+        fetch('/api/save_maze', {
+            method: 'POST',
+            headers: {'content-type': 'application/json; charset=UTF-8'},
+            body: currentMaze.to_json_string()
+        });
     };
 
     const generate = () => {
@@ -54,7 +58,7 @@ export function Main() {
                         </div>
                         <div id='button-div'>
                             <div><button type='button' id='generate-button' onClick={generate}>Generate</button></div>
-                            <div><button type='button' id='save-button' onClick={save}>Save</button></div>
+                            <div><button type='button' id='save-button' onClick={save} disabled={currentMaze === null}>Save</button></div>
                         </div>
                     </form>
                 </div>

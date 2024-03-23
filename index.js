@@ -16,7 +16,6 @@ async function save_maze() {
             body: current_maze
         });
     }
-    update_latest_saved_mazes();
 }
 
 async function save_maze_clicked() {
