@@ -2,14 +2,11 @@ import React, { useState } from 'react';
 import Maze from './maze'
 import { Maze as MazeObj } from '../modules/maze';
 import './index-styles.css'
-import { useNavigate } from 'react-router-dom';
 
-export default function Main({ authToken }) {
+export default function Main() {
     const [currentMaze, setCurrentMaze] = useState(null);
     const [width, setWidth] = useState(10);
     const [height, setHeight] = useState(10);
-
-    const navigate = useNavigate();
 
     const widthChanged = (event) => {
         const newValue = Math.max(5, Math.min(50, Number(event.target.value)));
@@ -22,16 +19,12 @@ export default function Main({ authToken }) {
     };
 
     const save = () => {
-        if (authToken === null){
-            navigate('/login')
-        } else {
-            fetch('/api/save_maze', {
-                method: 'POST',
-                headers: {'content-type': 'application/json; charset=UTF-8'},
-                body: currentMaze.to_json_string()
-            });
-            }
-    };
+        fetch('/api/save_maze', {
+            method: 'POST',
+            headers: {'content-type': 'application/json; charset=UTF-8'},
+            body: currentMaze.to_json_string()
+        });
+    }    
 
     const generate = () => {
         setCurrentMaze(MazeObj.generate_maze(width, height));

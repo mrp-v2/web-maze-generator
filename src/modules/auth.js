@@ -38,10 +38,6 @@ export async function attempt_auth(url, username, password) {
         })
     });
     if (response.ok){
-        localStorage.setItem("username", username);
-        const url = new URL(window.location.href);
-        if (url.searchParams.has('post_authenticate_page')){
-            window.location.href = url.searchParams.get('post_authenticate_page');
-        }
+        return true;
     }
 }

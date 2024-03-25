@@ -10,15 +10,14 @@ import Footer from './footer';
 
 export default function App(){
     const [username, setUsername] = useState(null);
-    const [authToken, setAuthToken] = useState(null);
     return (
         <BrowserRouter>
             <div className='body'>
-                <Header show_saved_mazes_button={true} username={authToken ? username : ''} authorized={authToken !== null}/>
+                <Header show_saved_mazes_button={true} username={username ? username : ''} authorized={username !== null}/>
                 <Routes>
-                    <Route path='/' element={<Main authToken={authToken}/>} exact />
+                    <Route path='/' element={<Main />} exact />
                     <Route path='/saved-mazes' element={<SavedMazes />} />
-                    <Route path='/login' element={<Login />} />
+                    <Route path='/login' element={<Login login={setUsername}/>} />
                     <Route path='/create-account' element={<CreateAccount />} />
                     <Route path='*' element={<NotFound />} />
                 </Routes>
