@@ -2,28 +2,24 @@ import React from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import './universal-styles.css';
 
-function SavedMazesButton({show, authorized}){
+function SavedMazesButton({authorized}){
 
     const navigate = useNavigate();
 
-    function savedMazesPressed(){
+    const savedMazesPressed = () => {
         navigate('/saved-mazes');
     }
 
-    if (show){
-        return (
-            <div className='button'><button type='button' onClick={savedMazesPressed} disabled={!authorized}>Saved Mazes</button></div>
-        );
-    } else {
-        return <></>;
-    }
+    return (
+        <div className='button'><button type='button' onClick={savedMazesPressed} disabled={!authorized}>Saved Mazes</button></div>
+    );
 }
 
 function UsernameOrLogin({username}){
 
     const navigate = useNavigate();
 
-    function loginClicked(){
+    const loginClicked = () => {
         navigate('/login');
     }
 
@@ -39,13 +35,13 @@ function UsernameOrLogin({username}){
     }
 }
 
-export default function Header({show_saved_mazes_button, username, authorized}){
+export default function Header({show_username, username}){
     return (
     <header>
-        <h1><NavLink to=''>Web Maze Generator</NavLink></h1>
+        <h1><NavLink to='/'>Web Maze Generator</NavLink></h1>
         <div className='portrait-div'>
-            <UsernameOrLogin username={authorized ? username : null}/>
-            <SavedMazesButton show={show_saved_mazes_button} authorized={authorized}/>
+            {show_username ? <UsernameOrLogin username={username}/> : <div className='header-filler'></div>}
+            <SavedMazesButton show={show_username} authorized={username !== null}/>
         </div>
     </header>
     );
