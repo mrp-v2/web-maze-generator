@@ -3,7 +3,6 @@ import { BrowserRouter, NavLink, Route, Routes } from 'react-router-dom';
 import Main from './maze/main';
 import { SavedMazes } from './maze/saved-mazes';
 import { Login } from './auth/login';
-import { CreateAccount } from './auth/create-account';
 import './universal-styles.css';
 import Header from './header';
 import Footer from './footer';
@@ -17,8 +16,7 @@ export default function App(){
                 <Routes>
                     <Route path='/' element={<Main />} exact />
                     <Route path='/saved-mazes' element={<SavedMazes />} />
-                    <Route path='/login' element={<Login login={setUsername}/>} />
-                    <Route path='/create-account' element={<CreateAccount />} />
+                    <Route path='/login' element={<Login login_callback={setUsername}/>} />
                     <Route path='*' element={<NotFound />} />
                 </Routes>
                 <Footer />

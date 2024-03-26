@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { attempt_auth } from '../modules/auth';
 
-export function Login({ login }) {
+export function Login({ login_callback }) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [lastError, setLastError] = useState(null);
@@ -11,7 +11,7 @@ export function Login({ login }) {
 
     const login = async () => {
         if (await attempt_auth('login', username, password)) {
-            login(username);
+            login_callback(username);
             navigate('/');
         } else {
             setLastError('Invalid username or password.');
@@ -28,7 +28,7 @@ export function Login({ login }) {
             return;
         }
         if (await attempt_auth('create', username, password)) { 
-            login(username);
+            login_callback(username);
             navigate('/');
         } else {
             setLastError('Failed to create account.')
