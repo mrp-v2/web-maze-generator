@@ -70,7 +70,8 @@ web_socket.on('connection', (socket, req) => {
                 })
             });
             socket.on('message', async (event) => {
-                connection.username = await event.data;
+                connection.username = event.toString();
+                socket.send();
             });
             break;
     }

@@ -6,7 +6,7 @@ import './saved-styles.css';
 import { useNavigate } from 'react-router-dom';
 
 export default function SavedMazes({username}) {
-    const [mazes, setMazes] = useState(Array());
+    const [mazes, setMazes] = useState([]);
 
     const navigate = useNavigate();
 
@@ -29,9 +29,7 @@ export default function SavedMazes({username}) {
             });
             if (response.ok){
                 const mazes_json = await response.json();
-                setMazes(mazes_json.map((json) => {
-                    MazeClass.from_json(json);
-                }));
+                setMazes(mazes_json.map((json) => MazeClass.from_json(json)));
             }
         };
 
