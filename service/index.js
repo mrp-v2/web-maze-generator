@@ -10,7 +10,8 @@ const auth_cookie_name = 'auth_token';
 
 const port = process.argv.length > 2 ? process.argv[2] : 4000;
 
-let connections = [];
+let latest_maze_connections = [];
+let saved_maze_connections = [];
 
 app.use(express.json());
 app.use(cookie_parser());
@@ -18,27 +19,78 @@ app.use(express.static('public'));
 
 const web_socket = new WebSocketServer({noServer: true});
 
-web_socket.on('connection', (socket) => {
-    const connection = { id: uuid.v4(), alive: true, socket: socket };
-    connections.push(connection);
+function update_latest_mazes(connection, mazes){
+    connection.socket.send(JSON.stringify(mazes));
+}
 
-    socket.on('close', () => {
-        connections.findIndex((o, i) => {
-            if (o.id === connection.id) {
-                connections.splice(i, 1);
-                return true;
-            }
-        })
-    });
+web_socket.on('connection', (socket, req) => {
+
+    const url = new URL(req.url, 'https://startup.mrp-v2.net');
+
+    if (!url.searchParams.has('type')){
+        socket.close();
+        return;
+    }
+
+    let connection;
+
+    switch (url.searchParams.get('type')){
+        case 'latest-mazes':
+            connection = {
+                id: uuid.v4(),
+                alive: true,
+                socket: socket
+            };
+            latest_maze_connections.push(connection);
+            socket.on('close', () => {
+                latest_maze_connections.findIndex((o, i) => {
+                    if (o.id === connection.id) {
+                        latest_maze_connections.splice(i, 1);
+                        return true;
+                    }
+                })
+            });
+            const mazes = database.get_latest_saved_mazes();
+            update_latest_mazes(connection, mazes);
+            break;
+        case 'saved-mazes':
+            connection = {
+                id: uuid.v4(),
+                alive: true,
+                socket: socket,
+                username: null
+            };
+            saved_maze_connections.push(connection);
+            socket.on('close', () => {
+                saved_maze_connections.findIndex((o, i) => {
+                    if (o.id === connection.id) {
+                        saved_maze_connections.splice(i, 1);
+                        return true;
+                    }
+                })
+            });
+            socket.on('message', async (event) => {
+                connection.username = await event.data;
+            });
+            break;
+    }
 
     socket.on('pong', () => {
         connection.alive = true;
-    })
+    });
 });
 
 setInterval(() => {
-    connections.forEach((c) => {
+    latest_maze_connections.forEach((c) => {
         if (!c.alive) {
+            c.socket.terminate();
+        } else {
+            c.alive = false;
+            c.socket.ping();
+        }
+    });
+    saved_maze_connections.forEach((c) => {
+        if (!c.alive){
             c.socket.terminate();
         } else {
             c.alive = false;
@@ -82,7 +134,7 @@ api_router.delete('/auth/logout', (req, res) => {
 api_router.get('/auth/user/:username', async (req, res) => {
     const user = await database.get_user(req.params.username);
     if (user){
-        const token = req?.cookies[auth_cookie_name];
+        const token = req.cookies[auth_cookie_name];
         res.send({ username: user.username, authenticated: token == user.token });
         return;
     }
@@ -111,11 +163,18 @@ secure_api_router.use(async (req, res, next) => {
 });
 
 secure_api_router.post('/save_maze', async (req, res) => {
-    await database.save_maze(req.cookies[auth_cookie_name], req.body)
-    res.send(await database.get_mazes_by_token(req.cookies[auth_cookie_name]));
-    connections.forEach((c) => {
-        c.socket.send(JSON.stringify({ type: 'update_latest_mazes' }));
-    })
+    await database.save_maze(req.cookies[auth_cookie_name], req.body);
+    res.end();
+    const latest_mazes = database.get_latest_saved_mazes();
+    latest_maze_connections.forEach((c) => {
+        update_latest_mazes(c, latest_mazes);
+    });
+    const user = database.get_user_by_token(req.cookies[auth_cookie_name]);
+    saved_maze_connections.forEach((c) => {
+        if (c.username === user.username){
+            c.socket.send();
+        }
+    });
 });
 
 secure_api_router.post('/delete_maze', async (req, res) => {

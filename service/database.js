@@ -38,20 +38,19 @@ async function create_user(username, password) {
 }
 
 async function save_maze(token, maze) {
-    const user = await get_user_by_token(token);
     /** @type { Array } */
-    const mazes = user.mazes;
+    const mazes = await get_mazes_by_token(token);
     mazes.push(maze);
     const result = await user_collection.updateOne({token: token}, {
         $set: {
             mazes: mazes
         }
     })
-    if (result && result.modifiedCount > 0){
-        latest_saved_mazes = [maze, latest_saved_mazes[0], latest_saved_mazes[1]];
-        return mazes;
-    } else {
-        return null;
+    if (result && result.modifiedCount > 0) {
+        const size = latest_saved_mazes.unshift(maze);
+        if (size > 3){
+            latest_saved_mazes = latest_saved_mazes.slice(0, 3);
+        }
     }
 }
 

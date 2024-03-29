@@ -1,10 +1,44 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Header from '../header';
 import Maze from './maze';
 import { Maze as MazeClass } from '../modules/maze';
 import './saved-styles.css';
+import { useNavigate } from 'react-router-dom';
 
-export default function SavedMazes({username, mazes}) {
+export default function SavedMazes({username}) {
+    const [mazes, setMazes] = useState(Array());
+
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (!username){
+            navigate('/');
+            return;
+        }    
+
+        const protocol = window.location.protocol === 'http:' ? 'ws' : 'wss';
+        const websocket = new WebSocket(`${protocol}://${window.location.host}/ws?type=saved-mazes`);
+
+        websocket.onopen = () => {
+            websocket.send(username);
+        };
+
+        websocket.onmessage = async (event) => {
+            const response = await fetch(`/api/mazes/${username}`, {
+                method: 'GET'
+            });
+            if (response.ok){
+                const mazes_json = await response.json();
+                setMazes(mazes_json.map((json) => {
+                    MazeClass.from_json(json);
+                }));
+            }
+        };
+
+        return () => {
+            websocket.close();
+        };
+    }, []);
 
     const make_delete_maze = (index) => {
         return async () => {

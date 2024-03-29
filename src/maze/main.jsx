@@ -1,13 +1,30 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Maze from './maze'
 import Header from '../header';
 import { Maze as MazeClass } from '../modules/maze';
 import './index-styles.css'
 
-export default function Main({username, latest_mazes}) {
+export default function Main({username}) {
     const [currentMaze, setCurrentMaze] = useState(null);
     const [width, setWidth] = useState(10);
     const [height, setHeight] = useState(10);
+    const [latestMazes, setLatestMazes] = useState([]);
+
+    useEffect(() => {
+        const protocol = window.location.protocol === 'http:' ? 'ws' : 'wss';
+        const websocket = new WebSocket(`${protocol}://${window.location.host}/ws?type=latest-mazes`);
+
+        websocket.onmessage = (event) => {
+            const mazes = JSON.parse(event.data);
+            setLatestMazes(mazes.map((json) => {
+                return MazeClass.from_json(json);
+            }));
+        };
+
+        return () => {
+            websocket.close();
+        };
+    }, []);
 
     const widthChanged = (event) => {
         const newValue = Math.max(5, Math.min(50, Number(event.target.value)));
@@ -40,7 +57,7 @@ export default function Main({username, latest_mazes}) {
                     <div id='latest-saved-mazes-mazes-div'>
                         {
                             [1, 2, 3].map((number) => {
-                                return <Maze maze={latest_mazes.length >= number ? latest_mazes[number - 1] : null} maze_id={'latest-maze-' + number} key={number} />;
+                                return <Maze maze={latestMazes.length >= number ? latestMazes[number - 1] : null} maze_id={'latest-maze-' + number} key={number} />;
                             })
                         }
                     </div>
@@ -60,7 +77,7 @@ export default function Main({username, latest_mazes}) {
                             </div>
                             <div id='button-div'>
                                 <div><button type='button' id='generate-button' onClick={generate}>Generate</button></div>
-                                <div><button type='button' id='save-button' onClick={save} disabled={currentMaze === null}>Save</button></div>
+                                <div><button type='button' id='save-button' onClick={save} disabled={currentMaze === null || username === null}>Save</button></div>
                             </div>
                         </form>
                     </div>
