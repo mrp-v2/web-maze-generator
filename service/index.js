@@ -127,11 +127,6 @@ api_router.post('/auth/login', async (req, res) => {
     res.status(401).send({ msg: 'Invalid auth token'});
 });
 
-api_router.delete('/auth/logout', (req, res) => {
-    res.clearCookie(auth_cookie_name);
-    res.status(204).end();
-});
-
 api_router.get('/auth/user/:username', async (req, res) => {
     const user = await database.get_user(req.params.username);
     if (user){
@@ -170,16 +165,21 @@ secure_api_router.post('/save_maze', async (req, res) => {
     latest_maze_connections.forEach((c) => {
         update_latest_mazes(c, latest_mazes);
     });
-    const user = database.get_user_by_token(req.cookies[auth_cookie_name]);
+    update_client_saved_mazes(req.cookies[auth_cookie_name]);
+});
+
+function update_client_saved_mazes(token) {
+    const user = database.get_user_by_token(token);
     saved_maze_connections.forEach((c) => {
-        if (c.username === user.username){
+        if (c.username == user.username){
             c.socket.send();
         }
     });
-});
+}
 
 secure_api_router.post('/delete_maze', async (req, res) => {
     res.send(await database.delete_maze(req.cookies[auth_cookie_name], req.body.index))
+    update_client_saved_mazes(req.cookies[auth_cookie_name]);
 });
 
 app.use(function (err, req, res, next) {

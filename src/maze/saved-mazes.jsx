@@ -5,10 +5,53 @@ import { Maze as MazeClass } from '../modules/maze';
 import './saved-styles.css';
 import { useNavigate } from 'react-router-dom';
 
+function SavedMaze({maze, index, setWaiting, onDelete, delete_enabled}) {
+
+    const make_delete_maze = (index) => {
+        return async () => {
+            setWaiting(true);
+            await fetch('/api/delete_maze', {
+                method: 'POST',
+                headers: {'content-type': 'application/json; charset=UTF-8'},
+                body: JSON.stringify({index: index})
+            });
+            onDelete();
+            setWaiting(false);
+        };
+    };
+
+    return (
+        <div key={index}>
+            <Maze maze={maze}/>
+            <div>
+                <div className='text-div'>
+                    {maze.width()} x {maze.height()}
+                </div>
+                <div className='button-div'>
+                    <button type='button' onClick={make_delete_maze(index)} disabled={!delete_enabled}>
+                        Delete
+                    </button>
+                </div>
+            </div>
+        </div>
+    );
+}
+
 export default function SavedMazes({username}) {
     const [mazes, setMazes] = useState([]);
+    const [waiting, setWaiting] = useState(false);
 
     const navigate = useNavigate();
+
+    const update_mazes = async () => {
+        const response = await fetch(`/api/mazes/${username}`, {
+            method: 'GET'
+        });
+        if (response.ok){
+            const json = await response.json();
+            setMazes(json.map((json) => MazeClass.from_json(json)));
+        }
+    };
 
     useEffect(() => {
         if (!username){
@@ -23,52 +66,18 @@ export default function SavedMazes({username}) {
             websocket.send(username);
         };
 
-        websocket.onmessage = async (event) => {
-            const response = await fetch(`/api/mazes/${username}`, {
-                method: 'GET'
-            });
-            if (response.ok){
-                const mazes_json = await response.json();
-                setMazes(mazes_json.map((json) => MazeClass.from_json(json)));
-            }
-        };
+        websocket.onmessage = update_mazes;
 
         return () => {
             websocket.close();
         };
     }, []);
 
-    const make_delete_maze = (index) => {
-        return async () => {
-            await fetch('/api/delete_maze', {
-                method: 'POST',
-                headers: {'content-type': 'application/json; charset=UTF-8'},
-                body: JSON.stringify({index: index})
-            })
-        };
-    }
-
     return (
         <>
             <Header show_username={true} username={username} />
             <main>
-                {mazes.map((maze, index) => {
-                    return (
-                        <div key={index}>
-                            <Maze maze={maze}/>
-                            <div>
-                                <div className='text-div'>
-                                    {maze.width()} x {maze.height()}
-                                </div>
-                                <div className='button-div'>
-                                    <button type='button' onClick={make_delete_maze(index)}>
-                                        Delete
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    );
-                })}
+                {mazes.map((maze, index) => <SavedMaze maze={maze} index={index} setWaiting={setWaiting} onDelete={update_mazes} delete_enabled={!waiting}/>)}
             </main>
         </>
     );
