@@ -75,7 +75,7 @@ export default function SavedMazes({username}) {
 
     return (
         <>
-            <Header show_username={true} username={username} />
+            <Header show_auth_state={true} username={username} show_saved_mazes_button={false}/>
             <main>
                 {mazes.map((maze, index) => <SavedMaze maze={maze} index={index} setWaiting={setWaiting} onDelete={update_mazes} delete_enabled={!waiting}/>)}
             </main>

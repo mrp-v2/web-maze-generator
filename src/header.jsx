@@ -2,7 +2,11 @@ import React from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import './universal-styles.css';
 
-function SavedMazesButton({authorized}){
+function SavedMazesButton({authorized, show}){
+
+    if (!show){
+        return;
+    }
 
     const navigate = useNavigate();
 
@@ -35,13 +39,13 @@ function UsernameOrLogin({username}){
     }
 }
 
-export default function Header({show_username, username}){
+export default function Header({show_auth_state, username, show_saved_mazes_button}){
     return (
     <header>
         <h1><NavLink to='/'>Web Maze Generator</NavLink></h1>
         <div className='portrait-div'>
-            {show_username ? <UsernameOrLogin username={username}/> : <div className='header-filler'></div>}
-            <SavedMazesButton show={show_username} authorized={username !== null}/>
+            {show_auth_state ? <UsernameOrLogin username={username}/> : <div className='header-filler'></div>}
+            <SavedMazesButton show={show_saved_mazes_button} authorized={username !== null}/>
         </div>
     </header>
     );

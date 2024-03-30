@@ -50,7 +50,7 @@ export default function Main({username}) {
 
     return (
         <>
-            <Header show_username={true} username={username}/>
+            <Header show_auth_state={true} username={username} show_saved_mazes_button={true}/>
             <main>
                 <aside id='latest-saved-mazes-div'>
                     <h2>Latest Mazes Saved</h2>

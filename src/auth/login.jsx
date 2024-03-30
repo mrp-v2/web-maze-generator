@@ -47,7 +47,7 @@ export default function Login({ login_callback }) {
 
     return (
         <>
-            <Header show_username={false} username={null}/>
+            <Header show_auth_state={false} username={null} show_saved_mazes_button={false}/>
             <main>
                 <div>
                     <div>
