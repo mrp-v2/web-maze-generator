@@ -4,7 +4,6 @@ import Main from './maze/main';
 import SavedMazes from './maze/saved-mazes';
 import Login from './auth/login';
 import Footer from './footer';
-import { Maze as MazeClass } from './modules/maze';
 import './universal-styles.css';
 
 export default function App(){

@@ -20,11 +20,11 @@
     flex-direction: column;
 }
 
-#latest-saved-mazes-mazes-div > svg {
+#latest-saved-mazes-mazes-div svg {
     flex: 1;
 }
 
-#latest-saved-mazes-mazes-div > #latest-maze-2 {
+#latest-saved-mazes-mazes-div #latest-maze-2 {
     margin: 1rem 0rem;
 }
 
@@ -93,11 +93,6 @@ form {
 #input-div > div > label {
     color: var(--white);
     align-self: center;
-}
-
-#quote {
-    flex: 1;
-    text-align: right;
 }
 
 @media (orientation: portrait) {

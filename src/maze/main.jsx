@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Maze from './maze'
 import Header from '../header';
 import { Maze as MazeClass } from '../modules/maze';
-import './index-styles.css'
+import './index-styles.css';
 
 export default function Main({username}) {
     const [currentMaze, setCurrentMaze] = useState(null);
