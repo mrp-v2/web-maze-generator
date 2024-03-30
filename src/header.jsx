@@ -15,7 +15,7 @@ function SavedMazesButton({authorized, show}){
     }
 
     return (
-        <div className='button'><button type='button' onClick={savedMazesPressed} disabled={!authorized}>Saved Mazes</button></div>
+        <div className='button-div'><button type='button' onClick={savedMazesPressed} disabled={!authorized}>Saved Mazes</button></div>
     );
 }
 
@@ -33,7 +33,7 @@ function UsernameOrLogin({username}){
         return (
             <>
                 <div className='header-filler'></div>
-                <div className='button'><button type='button' onClick={loginClicked}>Login</button></div>
+                <div className='button-div'><button type='button' onClick={loginClicked}>Login</button></div>
             </>
         );
     }
