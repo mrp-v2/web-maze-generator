@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { attempt_auth } from '../modules/auth';
 import Header from '../header';
-import './login-styles.css';
+import './login.css';
 
 export default function Login({ login_callback }) {
     const [username, setUsername] = useState('');
@@ -48,7 +48,7 @@ export default function Login({ login_callback }) {
     return (
         <>
             <Header show_auth_state={false} username={null} show_saved_mazes_button={false}/>
-            <main>
+            <main id='login'>
                 <div>
                     <div>
                         <label htmlFor='username'>Username:</label>

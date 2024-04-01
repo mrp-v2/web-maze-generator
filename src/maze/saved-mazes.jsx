@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Header from '../header';
 import Maze from './maze';
 import { Maze as MazeClass } from '../modules/maze';
-import './saved-styles.css';
+import './saved-mazes.css';
 import { useNavigate } from 'react-router-dom';
 
 function SavedMaze({maze, index, setWaiting, onDelete, delete_enabled}) {
@@ -21,7 +21,7 @@ function SavedMaze({maze, index, setWaiting, onDelete, delete_enabled}) {
     };
 
     return (
-        <div key={index}>
+        <div>
             <Maze maze={maze}/>
             <div>
                 <div className='text-div'>
@@ -76,8 +76,8 @@ export default function SavedMazes({username}) {
     return (
         <>
             <Header show_auth_state={true} username={username} show_saved_mazes_button={false}/>
-            <main>
-                {mazes.map((maze, index) => <SavedMaze maze={maze} index={index} setWaiting={setWaiting} onDelete={update_mazes} delete_enabled={!waiting}/>)}
+            <main id='saved_mazes'>
+                {mazes.map((maze, index) => <SavedMaze key={maze.encoded_data()} maze={maze} index={index} setWaiting={setWaiting} onDelete={update_mazes} delete_enabled={!waiting}/>)}
             </main>
         </>
     );

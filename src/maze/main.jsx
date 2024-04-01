@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Maze from './maze'
 import Header from '../header';
 import { Maze as MazeClass } from '../modules/maze';
-import './index-styles.css';
+import './main.css';
 
 export default function Main({username}) {
     const [currentMaze, setCurrentMaze] = useState(null);
@@ -51,7 +51,7 @@ export default function Main({username}) {
     return (
         <>
             <Header show_auth_state={true} username={username} show_saved_mazes_button={true}/>
-            <main>
+            <main id='main'>
                 <aside id='latest-saved-mazes-div'>
                     <h2>Latest Mazes Saved</h2>
                     <div id='latest-saved-mazes-mazes-div'>

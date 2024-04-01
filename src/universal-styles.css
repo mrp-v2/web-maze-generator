@@ -12,7 +12,7 @@
     box-sizing: border-box;
 }
 
-body {
+div.body {
     background-color: var(--white);
     margin: 0;
     display: flex;
@@ -88,7 +88,7 @@ footer {
     justify-content: left;
     align-items: center;
     color: var(--white);
-    padding: 0rem 1rem;
+    padding: 0.5rem 1rem;
 }
 
 footer a {

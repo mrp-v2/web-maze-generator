@@ -1,4 +1,4 @@
-#latest-saved-mazes-div {
+#main #latest-saved-mazes-div {
     float: left;
     background-color: var(--blue);
     border-radius: 10px;
@@ -9,26 +9,26 @@
     width: 25%;
 }
 
-#latest-saved-mazes-div > h2 {
+#main #latest-saved-mazes-div > h2 {
     text-align: center;
     flex: 0;
 }
 
-#latest-saved-mazes-mazes-div {
+#main #latest-saved-mazes-mazes-div {
     flex: 1;
     display: flex;
     flex-direction: column;
 }
 
-#latest-saved-mazes-mazes-div svg {
+#main #latest-saved-mazes-mazes-div svg {
     flex: 1;
 }
 
-#latest-saved-mazes-mazes-div #latest-maze-2 {
+#main #latest-saved-mazes-mazes-div #latest-maze-2 {
     margin: 1rem 0rem;
 }
 
-#maze-generation {
+#main #maze-generation {
     display: flex;
     flex-direction: column;
     height: 100%;
@@ -38,51 +38,51 @@
     padding: 0rem 1rem 1rem 1rem;
 }
 
-#generated-maze-div {
+#main #generated-maze-div {
     flex: 1
 }
 
-#generated-maze {
+#main #generated-maze {
     width: 100%;
     height: 100%;
 }
 
-#maze-generation-controls {
+#main #maze-generation-controls {
     display: flex;
     flex-direction: row;
 }
 
-form {
+#main form {
     flex: 1;
     display: flex;
     flex-direction: row;
     justify-content: center;
 }
 
-#input-div {
+#main #input-div {
     display: flex;
     flex-direction: row;
 }
 
-#button-div {
+#main #button-div {
     display: flex;
     flex-direction: row;
 }
 
-#button-div > div {
+#main #button-div > div {
     background-color: var(--white);
     border-radius: 6px;
     margin: 0.375rem;
 }
 
-#button-div > div > button {
+#main #button-div > div > button {
     border-radius: 5px;
     border-color: var(--red);
     border-width: 2px;
     margin: 0.125rem;
 }
 
-#input-div > div {
+#main #input-div > div {
     margin: 0.5rem;
     padding: 0.0rem;
     display: flex;
@@ -90,23 +90,23 @@ form {
     gap: 5px;
 }
 
-#input-div > div > label {
+#main #input-div > div > label {
     color: var(--white);
     align-self: center;
 }
 
 @media (orientation: portrait) {
-    #latest-saved-mazes-div {
+    #main #latest-saved-mazes-div {
         width: 100%;
         height: auto;
     }
 
-    #maze-generation {
+    #main #maze-generation {
         width: 100%;
         height: auto;
     }
 
-    #input-div > div {
+    #main #input-div > div {
         flex-direction: column;
     }
 }

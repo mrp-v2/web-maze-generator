@@ -1,4 +1,4 @@
-main {
+#login {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -6,7 +6,7 @@ main {
     gap: 1rem;
 }
 
-main > div {
+#login > div {
     background-color: var(--red);
     padding: 1rem 1rem 0.75rem 1rem;
     border-radius: 10px;
@@ -16,39 +16,31 @@ main > div {
     gap: 0.25rem;
 }
 
-main > div > div {
+#login > div > div {
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: center;
 }
 
-main > div > div > input {
+#login > div > div > input {
     flex: 0;
     color: var(--black)
 }
 
-main > div > div > label {
+#login > div > div > label {
     flex: 1;
 }
 
-main > div > div button {
+#login > div > div button {
     border-color: var(--red);
     border-radius: 5px;
     border-width: 2px;
     margin: 0.125rem;
 }
 
-.button-div {
+#login .button-div {
     background-color: var(--white);
     border-radius: 6px;
-    margin: 0.5rem 0rem 0rem 0rem;
-}
-
-main a {
-    background-color: var(--white);
-    color: var(--red);
-    padding: 0.25rem;
-    border-radius: 7px;
     margin: 0.5rem 0rem 0rem 0rem;
 }

@@ -19,6 +19,8 @@ export class Maze {
      * Rows then columns.
      *  @type {Array<boolean>} */
     #data;
+    /** @type {str} */
+    #encoded_data;
 
     /**
      * 
@@ -33,6 +35,7 @@ export class Maze {
         this.#fullheight = this.#height * 2 - 1;
         this.#fullsize = this.#fullwidth * this.#fullheight;
         this.#data = data;
+        this.#encoded_data = null;
     }
 
     static generate_maze(width, height) {
@@ -212,6 +215,14 @@ export class Maze {
 
     full_size(){
         return this.#fullsize;
+    }
+
+    encoded_data(){
+        if (this.#encoded_data === null){
+            const encoded_obj = this.#encode_maze();
+            this.#encoded_data = encoded_obj.scheme.toString() + encoded_obj.data;
+        }
+        return this.#encoded_data;
     }
 
     /**
