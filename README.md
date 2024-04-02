@@ -68,3 +68,8 @@ Added backend endpoints to receive mazes to save and return the list of saved ma
 - **Frontend initiates a WebSocket connection** - ✔️
 - **Data sent over WebSocket connection** - WebSocket is used to notify clients that a new maze has been saved by some user.
 - **WebSocket data Displayed** - Recent saved mazes are shown in the main page.
+## React Deliverable
+- **Bundled & Transpiled** - ✔️
+- **Components** - Components for each page, the header and the footer, and mazes
+- **Router** - Routing to login and saved mazes pages
+- **Hooks** - Hooks for the current maze, latest mazes, saved mazes, etc.
