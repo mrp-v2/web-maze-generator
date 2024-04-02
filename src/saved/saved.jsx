@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import Header from '../header';
-import Maze from './maze';
+import Maze from '../maze/maze';
 import { Maze as MazeClass } from '../modules/maze';
-import './saved-mazes.css';
+import './saved.css';
 import { useNavigate } from 'react-router-dom';
 
 function SavedMaze({maze, index, setWaiting, onDelete, delete_enabled}) {

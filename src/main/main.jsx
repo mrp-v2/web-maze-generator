@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import Maze from './maze'
+import Maze from '../maze/maze'
 import Header from '../header';
 import { Maze as MazeClass } from '../modules/maze';
 import './main.css';
 
-export default function Main({username}) {
-    const [currentMaze, setCurrentMaze] = useState(null);
+export default function Main({username, currentMaze, setCurrentMaze}) {
     const [width, setWidth] = useState(10);
     const [height, setHeight] = useState(10);
     const [latestMazes, setLatestMazes] = useState([]);
