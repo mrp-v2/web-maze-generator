@@ -3,8 +3,12 @@
     --white-1: #f0f0f0;
     --black: #202020;
     --green: #50aa50;
+    --green-1: #45a045;
     --blue: #50b0f0;
     --red: #ff6060;
+    --dark-gray: #404040;
+    --light-gray: #e0e0e0;
+    --light-gray-1: #d5d5d5;
 }
 
 * {

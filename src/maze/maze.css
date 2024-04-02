@@ -1,0 +1,21 @@
+rect.blocked {
+    fill: var(--dark-gray);
+}
+
+rect.empty, rect.selectable {
+    fill: var(--light-gray);
+}
+
+rect.selected {
+    fill: var(--green);
+}
+
+@media (hover: hover) {
+    rect.selectable:hover {
+        fill: var(--light-gray-1);
+    }
+
+    rect.selected:hover {
+        fill: var(--green-1);
+    }
+}
