@@ -126,7 +126,7 @@ export default function Maze({ maze, maze_id }) {
                 const selected = pos_equals(selectionA, pos) || pos_equals(selectionB, pos);
                 const isPath = contains_pos(path_positions, pos);
                 const isSelectable = selectable(pos);
-                return <Tile position={pos} onClick={handleSelected} isSelected={selected} isPath={isPath} selectable={isSelectable} key={key} />;
+                return <Tile position={pos} onClick={handleSelected} isSelected={selected} isPath={isPath} isSelectable={isSelectable} key={key} />;
             })}
         </svg>
     );
