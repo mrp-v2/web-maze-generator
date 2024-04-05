@@ -37,9 +37,20 @@ async function create_user(username, password) {
     return user;
 }
 
+function maze_equals(a, b) {
+    return a.data.data == b.data.data;
+}
+
+function maze_list_contains(list, maze) {
+    return list.findIndex((item) => maze_equals(item, maze)) >= 0;
+}
+
 async function save_maze(token, maze) {
     /** @type { Array } */
     const mazes = await get_mazes_by_token(token);
+    if (maze_list_contains(mazes, maze)){
+        return;
+    }
     mazes.push(maze);
     const result = await user_collection.updateOne({token: token}, {
         $set: {
@@ -73,13 +84,14 @@ async function get_mazes_by_token(token) {
  * @param {Object} maze_index 
  * @returns 
  */
-async function delete_maze(token, maze_index) {
+async function delete_maze(token, maze) {
     /** @type { Array } */
     const user = await get_user_by_token(token);
     /** @type { Array } */
     const mazes = user.mazes;
-    if (maze_index < 0 || maze_index >= mazes.length){
-        throw Error("maze index out of bounds");
+    const maze_index = mazes.findIndex((item) => maze_equals(item, maze));
+    if (maze_index < 0) {
+        return;
     }
     mazes.splice(maze_index, 1);
     const result = await user_collection.updateOne({token: token}, {
@@ -87,7 +99,7 @@ async function delete_maze(token, maze_index) {
             mazes: mazes
         }
     });
-    if (result && result.modifiedCount > 0){
+    if (result && result.modifiedCount > 0) {
         return mazes;
     } else {
         throw Error("Error trying to remove requested maze from database.");

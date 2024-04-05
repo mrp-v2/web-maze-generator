@@ -5,18 +5,16 @@ import { Maze as MazeClass } from '../modules/maze';
 import './saved.css';
 import { useNavigate } from 'react-router-dom';
 
-function SavedMaze({maze, index, setWaiting, onDelete, delete_enabled}) {
+function SavedMaze({maze, onDelete}) {
 
-    const make_delete_maze = (index) => {
+    const make_delete_maze = () => {
         return async () => {
-            setWaiting(true);
             await fetch('/api/delete_maze', {
                 method: 'POST',
                 headers: {'content-type': 'application/json; charset=UTF-8'},
-                body: JSON.stringify({index: index})
+                body: maze.to_json_string()
             });
             onDelete();
-            setWaiting(false);
         };
     };
 
@@ -28,7 +26,7 @@ function SavedMaze({maze, index, setWaiting, onDelete, delete_enabled}) {
                     {maze.width()} x {maze.height()}
                 </div>
                 <div className='button-div'>
-                    <button type='button' onClick={make_delete_maze(index)} disabled={!delete_enabled}>
+                    <button type='button' onClick={make_delete_maze()}>
                         Delete
                     </button>
                 </div>
@@ -77,7 +75,7 @@ export default function SavedMazes({username}) {
         <>
             <Header show_auth_state={true} username={username} show_saved_mazes_button={false}/>
             <main id='saved_mazes'>
-                {mazes.map((maze, index) => <SavedMaze key={maze.encoded_data()} maze={maze} index={index} setWaiting={setWaiting} onDelete={update_mazes} delete_enabled={!waiting}/>)}
+                {mazes.map((maze) => <SavedMaze key={maze.encoded_data()} maze={maze} onDelete={update_mazes} />)}
             </main>
         </>
     );

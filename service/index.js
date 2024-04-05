@@ -178,7 +178,7 @@ function update_client_saved_mazes(token) {
 }
 
 secure_api_router.post('/delete_maze', async (req, res) => {
-    res.send(await database.delete_maze(req.cookies[auth_cookie_name], req.body.index))
+    res.send(await database.delete_maze(req.cookies[auth_cookie_name], req.body))
     update_client_saved_mazes(req.cookies[auth_cookie_name]);
 });
 
