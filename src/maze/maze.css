@@ -10,6 +10,10 @@ rect.selected {
     fill: var(--green);
 }
 
+rect.path {
+    fill: var(--gray);
+}
+
 @media (hover: hover) {
     rect.selectable:hover {
         fill: var(--light-gray-1);
