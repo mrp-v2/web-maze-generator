@@ -17,7 +17,7 @@
     width: 100%;
 }
 
-#saved_mazes > div > div {
+#saved_mazes div.info {
     display: flex;
     flex-direction: row;
     padding: 0.5rem 0rem 0rem 0rem;

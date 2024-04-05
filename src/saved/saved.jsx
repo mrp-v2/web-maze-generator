@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Header from '../header';
-import Maze from '../maze/maze';
+import SaveableMaze from '../maze/saveable-maze';
 import { Maze as MazeClass } from '../modules/maze';
 import './saved.css';
 import { useNavigate } from 'react-router-dom';
@@ -20,8 +20,8 @@ function SavedMaze({maze, onDelete}) {
 
     return (
         <div>
-            <Maze maze={maze}/>
-            <div>
+            <SaveableMaze maze={maze}/>
+            <div className='info'>
                 <div className='text-div'>
                     {maze.width()} x {maze.height()}
                 </div>

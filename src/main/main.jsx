@@ -3,6 +3,7 @@ import Maze from '../maze/maze'
 import Header from '../header';
 import { Maze as MazeClass } from '../modules/maze';
 import './main.css';
+import SaveableMaze from '../maze/saveable-maze';
 
 export default function Main({username, currentMaze, setCurrentMaze}) {
     const [width, setWidth] = useState(10);
@@ -56,7 +57,7 @@ export default function Main({username, currentMaze, setCurrentMaze}) {
                     <div id='latest-saved-mazes-mazes-div'>
                         {
                             [1, 2, 3].map((number) => {
-                                return <Maze maze={latestMazes.length >= number ? latestMazes[number - 1] : null} maze_id={'latest-maze-' + number} key={number} />;
+                                return <SaveableMaze maze={latestMazes.length >= number ? latestMazes[number - 1] : null} maze_id={'latest-maze-' + number} key={number} />;
                             })
                         }
                     </div>
@@ -81,7 +82,7 @@ export default function Main({username, currentMaze, setCurrentMaze}) {
                         </form>
                     </div>
                     <div id='generated-maze-div'>
-                        <Maze maze={currentMaze} maze_id='generated-maze' />
+                        <SaveableMaze maze={currentMaze} maze_id='generated-maze' />
                     </div>
                 </div>
             </main>

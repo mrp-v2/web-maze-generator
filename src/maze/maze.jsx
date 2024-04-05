@@ -1,6 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import './maze.css';
 
+const styles = getComputedStyle(document.querySelector('#root'));
+const dark_gray = styles.getPropertyValue('--dark-gray');
+const gray = styles.getPropertyValue('--gray');
+const light_gray = styles.getPropertyValue('--light-gray');
+const green = styles.getPropertyValue('--green');
+
 function pos_equals(a, b) {
     if (a === null || b === null){
         return false;
@@ -69,8 +75,11 @@ function Tile({position, isSelected, onClick, isPath, isSelectable}) {
         onClick(x, y);
     };
 
+    const color = isSelected ? green : isPath ? gray : light_gray;
+    const className = isSelected ? 'selected' : isPath ? 'path' : isSelectable ? 'selectable' : 'empty';
+
     return (
-        <rect x={x + 1} y={y + 1} width='1' height='1' onClick={pressed} className={isSelected ? 'selected' : isPath ? 'path' : isSelectable ? 'selectable' : 'empty'}></rect>
+        <rect x={x + 1} y={y + 1} width='1' height='1' onClick={pressed} fill={color} className={className}></rect>
     );
 }
 
@@ -119,7 +128,7 @@ export default function Maze({ maze, maze_id }) {
 
     return (
         <svg id={maze_id} preserveAspectRatio='xMidYMid meet' viewBox={view_box}>
-            <rect x='0' y='0' width={width} height={height} className='blocked'></rect>
+            <rect x='0' y='0' width={width} height={height} fill={dark_gray}></rect>
             {positions.map((position) => { 
                 const pos = transform_position(position, maze.full_width());
                 const key = `${pos[0]},${pos[1]}`;

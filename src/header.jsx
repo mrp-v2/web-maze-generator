@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import './universal-styles.css';
+import './header.css';
 
 function SavedMazesButton({authorized, show}){
 

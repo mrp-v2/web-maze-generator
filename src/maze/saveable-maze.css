@@ -1,0 +1,8 @@
+div.saveable-maze {
+    display: flex;
+    flex-direction: column;
+}
+
+div.saveable-maze svg {
+    flex: 1;
+}

@@ -1,0 +1,60 @@
+header {
+    flex: 0 80px;
+    background-color: var(--green);
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+header h1 a {
+    color: var(--green); 
+    background-color: var(--white);
+    border-radius: 10px;
+    padding: 0.5rem 1rem;
+    margin: 1rem;
+    text-wrap: nowrap;
+}
+
+header .header-filler {
+    flex: 1
+}
+
+header i {
+    text-align: right;
+    align-self: center;
+    margin: 1rem;
+    font-size: 1.25rem;
+    color: var(--white);
+}
+
+header .portrait-div {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+}
+
+header div.button-div {
+    background-color: var(--white);
+    border-radius: 13px;
+    margin: 0.75rem;
+}
+
+header button {
+    border-radius: 10px;
+    border-width: 3px;
+    border-color: var(--green);
+    margin: 0.25rem;
+    font-size: 1.5rem;
+    text-wrap: nowrap;
+}
+
+header button:enabled {
+    color: var(--green);
+}
+
+@media (orientation: portrait){
+    header {
+        flex-direction: column;
+    }
+}

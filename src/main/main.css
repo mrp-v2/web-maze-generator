@@ -39,7 +39,12 @@
 }
 
 #main #generated-maze-div {
-    flex: 1
+    flex: 1;
+    display: flex;
+}
+
+#main #generated-maze-div > div.saveable-maze {
+    flex: 1;
 }
 
 #main #generated-maze {
