@@ -11,7 +11,7 @@ function SavedMazesButton({authorized, show}){
     const navigate = useNavigate();
 
     const savedMazesPressed = () => {
-        navigate('/saved-mazes');
+        navigate('/saved');
     }
 
     return (
